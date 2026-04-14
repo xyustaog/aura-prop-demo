@@ -808,7 +808,7 @@ function renderInquilinos(tab='inq',selInqId){
           <td>${ct?getProp(ct.propId).dir||'-':'-'}</td>
           <td><span class="badge ${estB}">${est}</span></td>
           <td class="no-print">
-            <a class="btn btn-teal btn-sm" href="https://wa.me/54${i.tel.replace(/\D/g,'')}?text=${encodeURIComponent('Hola '+i.nom+', te recordamos que tenés un pago pendiente.')}" target="_blank">WhatsApp</a>
+            <a class="btn btn-teal btn-sm" href="https://wa.me/54${i.tel.replace(/\D/g,'').replace(/^54/,'')}?text=${encodeURIComponent('Hola '+i.nom+', te recordamos que tenés un pago pendiente.')}" target="_blank">WhatsApp</a>
             <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();editInq('${i.id}')">Editar</button>
             <button class="btn btn-red btn-sm" onclick="event.stopPropagation();delInq('${i.id}')">✕</button>
           </td>
@@ -879,7 +879,7 @@ function renderInqDetail(id){
   <div class="flex justify-between flex-wrap gap-2" style="margin-bottom:20px">
     <div><h2>${i.nom}</h2><div class="text-muted text-sm" style="margin-top:4px;">DNI ${i.dni} · ${i.tel}</div></div>
     <div class="flex gap-2">
-      <a class="btn btn-teal btn-sm" href="https://wa.me/54${i.tel.replace(/\D/g,'')}?text=${encodeURIComponent('Hola '+i.nom+', recordatorio de pago.')}" target="_blank">WhatsApp</a>
+      <a class="btn btn-teal btn-sm" href="https://wa.me/54${i.tel.replace(/\D/g,'').replace(/^54/,'')}?text=${encodeURIComponent('Hola '+i.nom+', recordatorio de pago.')}" target="_blank">WhatsApp</a>
       <button class="btn btn-ghost btn-sm" onclick="editInq('${id}')">Editar</button>
     </div>
   </div>
