@@ -2,97 +2,233 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aura Prop</title>
+<title>Aura Prop — Sistema de Gestión Inmobiliaria | Yusta Labs</title>
+<meta name="description" content="Aura Prop: sistema de gestión integral para inmobiliarias y administradores de propiedades. Administrá propiedades, contratos, inquilinos, cobros y liquidaciones. Demo por Yusta Labs.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#030812;--surf:#080F22;--card:#0E1730;--pri:#6366F1;--teal:#0D9488;--red:#EF4444;--yel:#F59E0B;--grn:#10B981;--txt:#E2E8F0;--muted:#64748B;--brd:#1E293B;--rad:10px}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex;font-size:14px}
+:root{
+  --bg:#F8F7F4;
+  --surf:#FFFFFF;
+  --card:#FFFFFF;
+  --sidebar:#1A2744;
+  --sidebar-text:#E8E4DC;
+  --sidebar-muted:rgba(232,228,220,0.5);
+  --sidebar-active:rgba(201,169,110,0.15);
+  --primary:#1A2744;
+  --accent:#8B6914;
+  --text:#1A1A2E;
+  --muted:#64748B;
+  --brd:#E2DDD6;
+  --tbl-header:#F0EDE6;
+  --danger:#C0392B;
+  --success:#1E7E4B;
+  --warning:#92660A;
+  --rad:4px;
+}
+body{font-family:'Source Sans 3',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;font-size:14px;font-weight:400}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;font:inherit}
-input,select,textarea{font:inherit;background:var(--surf);border:1px solid var(--brd);color:var(--txt);border-radius:6px;padding:8px 10px;width:100%;outline:none}
-input:focus,select:focus,textarea:focus{border-color:var(--pri)}
-select option{background:var(--card)}
-label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
-h2{font-size:18px;font-weight:600}
-h3{font-size:15px;font-weight:600}
+input,select,textarea{font-family:'Source Sans 3',system-ui,sans-serif;background:var(--surf);border:1px solid var(--brd);color:var(--text);border-radius:var(--rad);padding:8px 10px;width:100%;outline:none;font-size:13px;font-weight:400}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+select option{background:var(--surf)}
+label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:500}
+h3{font-family:'Playfair Display',serif;font-size:16px;font-weight:500}
 
 /* Sidebar */
-#sidebar{width:220px;background:var(--surf);border-right:1px solid var(--brd);display:flex;flex-direction:column;padding:16px 0;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:.25s}
-.logo{display:flex;align-items:center;gap:10px;padding:0 16px 20px}
-.logo-icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--pri),var(--teal));display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo-icon svg{width:20px;height:20px}
-.logo-text{font-size:16px;font-weight:700;letter-spacing:.5px}
-.logo-text span{color:var(--pri)}
-nav a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:var(--muted);border-left:3px solid transparent;transition:.15s;font-size:13px}
-nav a:hover{color:var(--txt);background:rgba(99,102,241,.08)}
-nav a.active{color:var(--pri);border-left-color:var(--pri);background:rgba(99,102,241,.1)}
-nav a svg{width:18px;height:18px;flex-shrink:0}
+#sidebar{
+  width:220px;
+  background:var(--sidebar);
+  display:flex;
+  flex-direction:column;
+  padding:0;
+  position:fixed;
+  top:0;left:0;height:100vh;
+  z-index:100;
+  transition:.25s;
+  overflow:hidden;
+}
+.logo{
+  display:flex;
+  flex-direction:column;
+  padding:28px 20px 24px;
+  border-bottom:1px solid rgba(232,228,220,0.1);
+}
+.logo-title{
+  font-family:'Playfair Display',serif;
+  font-size:22px;
+  font-weight:400;
+  color:#FFFFFF;
+  letter-spacing:0.04em;
+}
+.logo-subtitle{
+  font-family:'Source Sans 3',sans-serif;
+  font-size:11px;
+  color:var(--sidebar-muted);
+  margin-top:4px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+}
+nav a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 20px;
+  color:var(--sidebar-muted);
+  border-left:3px solid transparent;
+  transition:.15s;
+  font-size:12px;
+  font-weight:400;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+}
+nav a:hover{color:var(--sidebar-text);background:rgba(255,255,255,0.04)}
+nav a.active{color:var(--sidebar-text);border-left-color:var(--accent);background:var(--sidebar-active)}
+nav a svg{width:16px;height:16px;flex-shrink:0;opacity:0.7}
+nav a.active svg{opacity:1}
+.sidebar-footer{
+  padding:16px 20px;
+  border-top:1px solid rgba(232,228,220,0.1);
+  margin-top:auto;
+}
+.sidebar-footer a{
+  font-size:11px;
+  color:var(--sidebar-muted);
+  text-decoration:none;
+  transition:color .15s;
+  letter-spacing:0.04em;
+}
+.sidebar-footer a:hover{color:var(--accent)}
+.sidebar-footer .powered{
+  color:var(--accent);
+  font-size:11px;
+  letter-spacing:0.04em;
+}
 
 /* Main */
-#main{margin-left:220px;flex:1;padding:24px;min-height:100vh}
+#main{margin-left:220px;flex:1;padding:32px;min-height:100vh;background:var(--bg)}
 .page{display:none}.page.active{display:block}
 
 /* Cards & KPIs */
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
-.kpi{background:var(--card);border:1px solid var(--brd);border-radius:var(--rad);padding:16px}
-.kpi-val{font-size:26px;font-weight:700;margin:4px 0}
-.kpi-label{font-size:12px;color:var(--muted)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.kpi{
+  background:var(--card);
+  border:1px solid var(--brd);
+  border-radius:var(--rad);
+  padding:20px 20px 16px;
+  border-left:3px solid var(--accent);
+  box-shadow:0 1px 3px rgba(0,0,0,0.08);
+}
+.kpi-val{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.8rem,3vw,2.6rem);
+  font-weight:400;
+  margin:8px 0 4px;
+  color:var(--text);
+  line-height:1;
+}
+.kpi-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:600}
 .kpi-sub{font-size:11px;color:var(--muted);margin-top:2px}
-.card{background:var(--card);border:1px solid var(--brd);border-radius:var(--rad);padding:16px;margin-bottom:14px}
+.card{
+  background:var(--card);
+  border:1px solid var(--brd);
+  border-radius:var(--rad);
+  padding:20px;
+  margin-bottom:16px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* Section heading accent */
+.section-heading-accent{
+  border-left:3px solid var(--accent);
+  padding-left:10px;
+  font-family:'Playfair Display',serif;
+  font-size:14px;
+  font-weight:500;
+  color:var(--text);
+  margin-bottom:14px;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+}
 
 /* Tables */
 .tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;padding:10px 12px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--brd);white-space:nowrap}
-td{padding:10px 12px;border-bottom:1px solid var(--brd);vertical-align:middle}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{
+  text-align:left;
+  padding:10px 14px;
+  font-size:10px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  border-bottom:2px solid var(--brd);
+  background:var(--tbl-header);
+  font-weight:600;
+  white-space:nowrap;
+}
+td{padding:11px 14px;border-bottom:1px solid var(--brd);vertical-align:middle;color:var(--text)}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,.02)}
+tr:nth-child(even) td{background:#FDFCFA}
+tr:hover td{background:#F5F2EB}
 
 /* Badges */
-.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
-.b-grn{background:rgba(16,185,129,.15);color:#10B981}
-.b-red{background:rgba(239,68,68,.15);color:#EF4444}
-.b-yel{background:rgba(245,158,11,.15);color:#F59E0B}
-.b-pri{background:rgba(99,102,241,.15);color:#6366F1}
-.b-muted{background:rgba(100,116,139,.15);color:#94A3B8}
-.b-teal{background:rgba(13,148,136,.15);color:#0D9488}
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase}
+.b-grn{background:rgba(30,126,75,0.1);color:var(--success)}
+.b-red{background:rgba(192,57,43,0.1);color:var(--danger)}
+.b-yel{background:rgba(146,102,10,0.1);color:var(--warning)}
+.b-pri{background:rgba(26,39,68,0.1);color:var(--primary)}
+.b-muted{background:rgba(100,116,139,0.1);color:var(--muted)}
+.b-teal{background:rgba(13,148,136,0.1);color:#0D7A70}
 
 /* Buttons */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;border:none;font-size:13px;font-weight:500;transition:.15s}
-.btn-pri{background:var(--pri);color:#fff}.btn-pri:hover{background:#5254cc}
-.btn-teal{background:var(--teal);color:#fff}.btn-teal:hover{background:#0b7a70}
-.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--brd)}.btn-ghost:hover{color:var(--txt);border-color:var(--muted)}
-.btn-red{background:rgba(239,68,68,.15);color:#EF4444;border:none}.btn-red:hover{background:rgba(239,68,68,.25)}
-.btn-sm{padding:4px 10px;font-size:12px;border-radius:5px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rad);border:none;font-size:12px;font-weight:600;transition:.15s;letter-spacing:0.04em;text-transform:uppercase;font-family:'Source Sans 3',sans-serif}
+.btn-pri{background:var(--primary);color:#fff;border:1px solid var(--primary)}.btn-pri:hover{background:#243460}
+.btn-teal{background:var(--accent);color:#fff;border:1px solid var(--accent)}.btn-teal:hover{background:#7a5c12}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--brd)}.btn-ghost:hover{color:var(--text);border-color:#C8C3BB;background:#F5F2EB}
+.btn-red{background:rgba(192,57,43,0.08);color:var(--danger);border:1px solid rgba(192,57,43,0.2)}.btn-red:hover{background:rgba(192,57,43,0.15)}
+.btn-sm{padding:5px 10px;font-size:11px;border-radius:var(--rad)}
+.btn-grn{background:var(--success);color:#fff;border:1px solid var(--success)}.btn-grn:hover{background:#1a6e41}
 
 /* Modal */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;padding:16px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(26,39,68,0.5);z-index:200;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
 .overlay.open{display:flex}
-.modal{background:var(--surf);border:1px solid var(--brd);border-radius:14px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;padding:24px}
-.modal-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.modal-hd h3{font-size:16px}
-.close-btn{background:none;border:none;color:var(--muted);font-size:20px;line-height:1;padding:2px 6px}.close-btn:hover{color:var(--txt)}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal{
+  background:var(--surf);
+  border:1px solid var(--brd);
+  border-radius:var(--rad);
+  width:100%;
+  max-width:540px;
+  max-height:90vh;
+  overflow-y:auto;
+  padding:28px;
+  box-shadow:0 4px 24px rgba(26,39,68,0.15);
+}
+.modal-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--brd)}
+.modal-hd h3{font-size:18px;color:var(--text)}
+.close-btn{background:none;border:none;color:var(--muted);font-size:18px;line-height:1;padding:2px 6px;transition:color .15s}.close-btn:hover{color:var(--text)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .full{grid-column:1/-1}
 .form-group{display:flex;flex-direction:column}
 
 /* Page header */
-.pg-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
-.pg-hd h2{font-size:20px}
+.pg-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:10px;padding-bottom:16px;border-bottom:2px solid var(--brd)}
+.pg-hd h2{font-size:26px;color:var(--text)}
 
 /* Alerts */
-.alert{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:8px;margin-bottom:8px;font-size:13px}
-.alert-red{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#FCA5A5}
-.alert-yel{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:#FCD34D}
-.alert-teal{background:rgba(13,148,136,.1);border:1px solid rgba(13,148,136,.2);color:#5EEAD4}
+.alert{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:var(--rad);margin-bottom:8px;font-size:13px;border-left:3px solid}
+.alert-red{background:rgba(192,57,43,0.06);border-color:var(--danger);color:#8B1C10}
+.alert-yel{background:rgba(146,102,10,0.06);border-color:var(--warning);color:#6B4A08}
+.alert-teal{background:rgba(26,126,75,0.06);border-color:var(--success);color:#145935}
 
 /* Two col layout */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 
 /* Cronograma */
 .crono{max-height:320px;overflow-y:auto}
-.crono-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--brd);font-size:13px}
-.crono-row.update{background:rgba(99,102,241,.06)}
+.crono-row{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--brd);font-size:13px}
+.crono-row.update{background:rgba(139,105,20,0.06)}
 .crono-row:last-child{border-bottom:none}
 
 /* Print */
@@ -101,20 +237,20 @@ tr:hover td{background:rgba(255,255,255,.02)}
   #main{margin:0;padding:0}
   .print-area{display:block!important}
   body{background:#fff;color:#000}
-  .card,.modal,.kpi{border:1px solid #ccc!important;background:#fff!important}
+  .card,.modal,.kpi{border:1px solid #ccc!important;background:#fff!important;box-shadow:none!important}
 }
 .print-area{display:none}
 
 /* Mobile */
-#bot-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:1px solid var(--brd);z-index:100;padding:6px 0 max(6px,env(safe-area-inset-bottom))}
+#bot-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:2px solid var(--brd);z-index:100;padding:6px 0 max(6px,env(safe-area-inset-bottom));box-shadow:0 -2px 8px rgba(0,0,0,0.06)}
 #bot-nav ul{display:flex;justify-content:space-around;list-style:none}
-#bot-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:var(--muted);padding:4px 8px}
-#bot-nav a.active{color:var(--pri)}
+#bot-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:var(--muted);padding:4px 8px;text-transform:uppercase;letter-spacing:0.04em}
+#bot-nav a.active{color:var(--accent)}
 #bot-nav svg{width:20px;height:20px}
 
 @media(max-width:768px){
   #sidebar{display:none}
-  #main{margin:0;padding:14px 12px 80px}
+  #main{margin:0;padding:16px 14px 80px}
   #bot-nav{display:block}
   .two-col{grid-template-columns:1fr}
   .form-grid{grid-template-columns:1fr}
@@ -122,20 +258,21 @@ tr:hover td{background:rgba(255,255,255,.02)}
 }
 
 /* Detail panel */
-.detail-back{display:flex;align-items:center;gap:8px;color:var(--muted);cursor:pointer;font-size:13px;margin-bottom:16px}
-.detail-back:hover{color:var(--txt)}
-.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:14px 0}
-.info-item .lbl{font-size:11px;color:var(--muted);margin-bottom:2px}
-.info-item .val{font-size:14px;font-weight:500}
+.detail-back{display:flex;align-items:center;gap:8px;color:var(--muted);cursor:pointer;font-size:13px;margin-bottom:16px;transition:color .15s;font-weight:600;text-transform:uppercase;letter-spacing:0.04em}
+.detail-back:hover{color:var(--accent)}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:16px 0}
+.info-item .lbl{font-size:10px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+.info-item .val{font-size:14px;font-weight:400;color:var(--text)}
 
 /* Tabs */
-.tabs{display:flex;gap:4px;border-bottom:1px solid var(--brd);margin-bottom:16px}
-.tab{padding:8px 14px;font-size:13px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none}
-.tab.active{color:var(--pri);border-bottom-color:var(--pri)}
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--brd);margin-bottom:20px}
+.tab{padding:9px 18px;font-size:11px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;background:none;border-top:none;border-left:none;border-right:none;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;transition:.15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab-pane{display:none}.tab-pane.active{display:block}
 
 /* Chips */
-.chip{display:inline-block;padding:3px 8px;border-radius:5px;font-size:11px;background:var(--brd);margin:2px}
+.chip{display:inline-block;padding:3px 8px;border-radius:var(--rad);font-size:11px;background:var(--tbl-header);border:1px solid var(--brd);margin:2px}
 
 .sep{height:1px;background:var(--brd);margin:16px 0}
 .text-muted{color:var(--muted)}
@@ -143,6 +280,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .mt-1{margin-top:8px}.mt-2{margin-top:16px}
 .flex{display:flex}.gap-2{gap:8px}.items-center{align-items:center}.justify-between{justify-content:space-between}.flex-wrap{flex-wrap:wrap}
 .w-full{width:100%}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--tbl-header)}
+::-webkit-scrollbar-thumb{background:var(--brd);border-radius:2px}
+
+/* Notification badge */
+.notif-badge{background:#f43f5e;color:#fff;font-size:10px;border-radius:999px;padding:2px 6px;margin-left:4px;font-weight:700;}
 </style>
 </head>
 <body>
@@ -150,12 +295,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <!-- SIDEBAR -->
 <div id="sidebar">
   <div class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </div>
-    <div class="logo-text">Aura <span>Prop</span></div>
+    <div class="logo-title">Aura Prop</div>
+    <div class="logo-subtitle">by Yusta Labs</div>
   </div>
   <nav id="desk-nav"></nav>
+  <div class="sidebar-footer">
+    <div style="margin-bottom:6px;font-size:10px;color:var(--sidebar-muted);letter-spacing:0.04em;text-transform:uppercase;">Desarrollado por</div>
+    <a href="https://yustalabs-web.vercel.app" target="_blank" class="powered">Yusta Labs ↗</a>
+  </div>
 </div>
 
 <!-- BOT NAV MOBILE -->
@@ -261,6 +408,7 @@ function buildNav(){
   dn.innerHTML=PAGES.map(p=>`<a href="#" data-page="${p.id}" onclick="nav('${p.id}');return false">${p.icon}${p.label}</a>`).join('');
   mn.innerHTML=PAGES.map(p=>`<li><a href="#" data-page="${p.id}" onclick="nav('${p.id}');return false">${p.icon}<span>${p.label}</span></a></li>`).join('');
   setNavActive();
+  renderNotifBadge();
 }
 function setNavActive(){
   document.querySelectorAll('[data-page]').forEach(a=>a.classList.toggle('active',a.dataset.page===curPage));
@@ -306,7 +454,6 @@ function buildCrono(c){
     cur=addMonths(cur,1);
     if(n>37) break;
   }
-  // mark update months
   return rows;
 }
 
@@ -338,15 +485,15 @@ function renderDashboard(){
   let alerts='';
   DB.cobros.filter(c=>c.estado==='vencido').forEach(cb=>{
     const inq=getInq(cb.inqId);
-    alerts+=`<div class="alert alert-red"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>${inq.nom} — Cuota ${cb.periodo} vencida</div>`;
+    alerts+=`<div class="alert alert-red"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>${inq.nom} — Cuota ${cb.periodo} vencida</div>`;
   });
   DB.contracts.filter(c=>c.estado==='activo'&&daysToEnd(c)<=90&&daysToEnd(c)>=0).forEach(c=>{
     const p=getProp(c.propId);
-    alerts+=`<div class="alert alert-yel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12" y2="17"/></svg>${p.dir} — Contrato vence en ${daysToEnd(c)} días</div>`;
+    alerts+=`<div class="alert alert-yel"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12" y2="17"/></svg>${p.dir} — Contrato vence en ${daysToEnd(c)} días</div>`;
   });
   DB.cobros.filter(c=>c.estado==='pendiente').forEach(cb=>{
     const inq=getInq(cb.inqId);
-    alerts+=`<div class="alert alert-teal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${inq.nom} — Cobro ${cb.periodo} pendiente (${fmt(cb.monto)})</div>`;
+    alerts+=`<div class="alert alert-teal"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${inq.nom} — Cobro ${cb.periodo} pendiente (${fmt(cb.monto)})</div>`;
   });
 
   // cobros list
@@ -357,24 +504,36 @@ function renderDashboard(){
   }).join('');
 
   el.innerHTML=`
-  <div class="pg-hd"><h2>Dashboard</h2><span class="text-muted text-sm">Marzo 2024</span></div>
+  <div class="pg-hd">
+    <h2>Dashboard</h2>
+    <span class="text-muted text-sm" style="font-size:13px;letter-spacing:0.04em;">Marzo 2024</span>
+  </div>
+  <div id="alertas-panel" style="margin-bottom:16px"></div>
+  <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+    <button onclick="nav('contratos')" style="flex:1;min-width:160px;padding:13px 18px;font-size:12px;font-weight:600;background:var(--primary);color:#fff;border:none;border-radius:var(--rad);cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;font-family:'Source Sans 3',sans-serif">Nuevo Contrato / Propiedad</button>
+    <button onclick="nav('reportes')" style="flex:1;min-width:160px;padding:13px 18px;font-size:12px;font-weight:600;background:var(--success);color:#fff;border:none;border-radius:var(--rad);cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;font-family:'Source Sans 3',sans-serif">Ver Cobros del Mes</button>
+  </div>
   <div class="kpi-grid">
-    <div class="kpi"><div class="kpi-label">Propiedades alquiladas</div><div class="kpi-val" style="color:var(--grn)">${alq}</div><div class="kpi-sub">${dis} disponibles</div></div>
-    <div class="kpi"><div class="kpi-label">Cobrado este mes</div><div class="kpi-val" style="color:var(--pri)">${fmt(pagado)}</div><div class="kpi-sub">${fmt(pend)} pendiente</div></div>
-    <div class="kpi"><div class="kpi-label">Contratos por vencer</div><div class="kpi-val" style="color:var(--yel)">${vcn90}</div><div class="kpi-sub">próximos 90 días</div></div>
-    <div class="kpi"><div class="kpi-label">Cuotas vencidas</div><div class="kpi-val" style="color:var(--red)">${venc}</div><div class="kpi-sub">requieren atención</div></div>
+    <div class="kpi"><div class="kpi-label">Propiedades alquiladas</div><div class="kpi-val" style="color:var(--success)">${alq}</div><div class="kpi-sub">${dis} disponibles</div></div>
+    <div class="kpi"><div class="kpi-label">Cobrado este mes</div><div class="kpi-val" style="color:var(--primary)">${fmt(pagado)}</div><div class="kpi-sub">${fmt(pend)} pendiente</div></div>
+    <div class="kpi"><div class="kpi-label">Contratos por vencer</div><div class="kpi-val" style="color:var(--warning)">${vcn90}</div><div class="kpi-sub">próximos 90 días</div></div>
+    <div class="kpi"><div class="kpi-label">Cuotas vencidas</div><div class="kpi-val" style="color:var(--danger)">${venc}</div><div class="kpi-sub">requieren atención</div></div>
   </div>
   <div class="two-col">
     <div>
-      <div class="card"><h3 style="margin-bottom:12px">Alertas</h3>${alerts||'<p class="text-muted text-sm">Sin alertas activas</p>'}</div>
+      <div class="card">
+        <div class="section-heading-accent">Alertas</div>
+        ${alerts||'<p class="text-muted text-sm">Sin alertas activas</p>'}
+      </div>
     </div>
     <div>
       <div class="card">
-        <h3 style="margin-bottom:12px">Cobros del mes</h3>
+        <div class="section-heading-accent">Cobros del mes</div>
         <div class="tbl-wrap"><table><thead><tr><th>Inquilino</th><th>Propiedad</th><th>Monto</th><th>Estado</th><th>Fecha</th></tr></thead><tbody>${cList}</tbody></table></div>
       </div>
     </div>
   </div>`;
+  renderNotifBadge();
 }
 
 // ── PROPIEDADES ───────────────────────────────────────────────────────
@@ -412,10 +571,14 @@ function renderPropDetail(el,id){
   const inq=ct?getInq(ct.inqId):null;
   const cobrosH=DB.cobros.filter(cb=>ct&&cb.contId===ct.id).sort((a,b)=>b.periodo.localeCompare(a.periodo)).slice(0,5);
   el.innerHTML=`
-  <div class="detail-back" onclick="renderPropiedades()">← Volver</div>
-  <div class="flex justify-between flex-wrap gap-2" style="margin-bottom:16px">
-    <div><h2>${p.dir}</h2><div class="text-muted text-sm">${p.tipo} · ${p.m2} m²</div></div>
-    <div class="flex gap-2">${stateBadge(p.estado)}<button class="btn btn-ghost btn-sm" onclick="editProp('${id}')">Editar</button></div>
+  <div class="detail-back" onclick="renderPropiedades()">← Volver a Propiedades</div>
+  <div class="flex justify-between flex-wrap gap-2" style="margin-bottom:20px">
+    <div><h2>${p.dir}</h2><div class="text-muted text-sm" style="margin-top:4px;">${p.tipo} · ${p.m2} m²</div></div>
+    <div class="flex gap-2" style="flex-wrap:wrap;">
+      ${stateBadge(p.estado)}
+      <button class="btn btn-ghost btn-sm" onclick="editProp('${id}')">Editar</button>
+      <button class="btn btn-teal btn-sm" onclick="modalLiquidacionProp('${id}')">💰 Liquidación</button>
+    </div>
   </div>
   <div class="info-grid">
     <div class="info-item"><div class="lbl">Precio actual</div><div class="val">${fmt(p.precio)}/mes</div></div>
@@ -423,10 +586,10 @@ function renderPropDetail(el,id){
     <div class="info-item"><div class="lbl">Propietario</div><div class="val">${ow.nom||'-'}</div></div>
     <div class="info-item"><div class="lbl">Comisión</div><div class="val">${ow.com||0}%</div></div>
   </div>
-  ${p.notas?`<div class="text-muted text-sm" style="margin:8px 0">Notas: ${p.notas}</div>`:''}
+  ${p.notas?`<div class="text-muted text-sm" style="margin:8px 0;padding:10px 14px;background:var(--tbl-header);border-left:3px solid var(--brd);">Notas: ${p.notas}</div>`:''}
   <div class="sep"></div>
   ${ct?`<div class="card">
-    <h3>Contrato activo</h3>
+    <div class="section-heading-accent">Contrato activo</div>
     <div class="info-grid">
       <div class="info-item"><div class="lbl">Inquilino</div><div class="val">${inq?inq.nom:'-'}</div></div>
       <div class="info-item"><div class="lbl">Inicio</div><div class="val">${fmtDate(ct.inicio)}</div></div>
@@ -435,11 +598,18 @@ function renderPropDetail(el,id){
       <div class="info-item"><div class="lbl">Actualización</div><div class="val">${ct.tipo} / ${ct.freq}</div></div>
     </div>
     <button class="btn btn-ghost btn-sm mt-1" onclick="nav('contratos')">Ver contrato completo</button>
-  </div>`:`<div class="card text-muted text-sm" style="padding:20px;text-align:center">Sin contrato activo — <button class="btn btn-teal btn-sm" onclick="nav('contratos')">Crear contrato</button></div>`}
-  ${cobrosH.length?`<div class="card mt-2"><h3 style="margin-bottom:10px">Últimos cobros</h3><div class="tbl-wrap"><table>
+  </div>`:`<div class="card text-muted text-sm" style="padding:20px;text-align:center;background:var(--tbl-header)">Sin contrato activo — <button class="btn btn-teal btn-sm" onclick="nav('contratos')">Crear contrato</button></div>`}
+  ${cobrosH.length?`<div class="card mt-2"><div class="section-heading-accent">Últimos cobros</div><div class="tbl-wrap"><table>
     <thead><tr><th>Período</th><th>Monto</th><th>Estado</th><th>Fecha</th></tr></thead>
     <tbody>${cobrosH.map(cb=>`<tr><td>${cb.periodo}</td><td>${fmt(cb.monto)}</td><td>${cobroBadge(cb.estado)}</td><td>${cb.fecha?fmtDate(cb.fecha):'-'}</td></tr>`).join('')}</tbody>
-  </table></div></div>`:''}`;
+  </table></div></div>`:''}
+  <div class="card mt-2" id="mant-section-${id}">
+    <div class="flex justify-between items-center" style="margin-bottom:14px;">
+      <div class="section-heading-accent" style="margin-bottom:0;">🔧 Mantenimiento</div>
+      <button class="btn btn-ghost btn-sm" onclick="openMantModal('${id}')">+ Registrar</button>
+    </div>
+    ${renderMantList(id)}
+  </div>`;
 }
 
 function propForm(p={}){
@@ -469,6 +639,8 @@ function saveProp(id){
   saveDB(DB); closeModalDirect(); renderPropiedades();
 }
 function delProp(id){
+  const contratos = DB.contracts.filter(c=>c.propId===id&&c.estado==='activo');
+  if(contratos.length>0){ alert(`Esta propiedad tiene ${contratos.length} contrato(s) activo(s). Rescindí los contratos primero.`); return; }
   if(!confirm('¿Eliminar propiedad?')) return;
   DB.props=DB.props.filter(p=>p.id!==id); saveDB(DB); renderPropiedades();
 }
@@ -506,7 +678,6 @@ function renderContDetail(el,id){
   const c=getContract(id); if(!c){renderContratos();return;}
   const p=getProp(c.propId); const inq=getInq(c.inqId);
   const crono=buildCrono(c);
-  // show first 36 and updates
   const cronoRows=crono.map(r=>`<div class="crono-row${r.update?' update':''}">
     <span>${r.n}. ${fmtDate(r.fecha)}</span>
     <span>${fmt(r.monto)}</span>
@@ -514,12 +685,13 @@ function renderContDetail(el,id){
   </div>`).join('');
   const updHist=c.updates.map(u=>`<tr><td>${fmtDate(u.fecha)}</td><td>+${u.pct}%</td><td>${fmt(u.nuevo)}</td></tr>`).join('');
   el.innerHTML=`
-  <div class="detail-back" onclick="renderContratos()">← Volver</div>
-  <div class="flex justify-between flex-wrap gap-2" style="margin-bottom:16px">
-    <div><h2>${p.dir}</h2><div class="text-muted text-sm">Inquilino: ${inq.nom}</div></div>
-    <div class="flex gap-2">
+  <div class="detail-back" onclick="renderContratos()">← Volver a Contratos</div>
+  <div class="flex justify-between flex-wrap gap-2" style="margin-bottom:20px">
+    <div><h2>${p.dir}</h2><div class="text-muted text-sm" style="margin-top:4px;">Inquilino: ${inq.nom}</div></div>
+    <div class="flex gap-2" style="flex-wrap:wrap;">
       ${stateBadge(c.estado)}
       <button class="btn btn-teal btn-sm" onclick="modalUpdate('${id}')">Aplicar actualización</button>
+      <button class="btn btn-ghost btn-sm" onclick="imprimirContrato('${id}')">📄 Imprimir Contrato</button>
       <button class="btn btn-red btn-sm" onclick="delContrato('${id}')">Rescindir</button>
     </div>
   </div>
@@ -528,16 +700,17 @@ function renderContDetail(el,id){
     <div class="info-item"><div class="lbl">Vencimiento</div><div class="val">${fmtDate(contractEnd(c))}</div></div>
     <div class="info-item"><div class="lbl">Duración</div><div class="val">${c.dur} meses</div></div>
     <div class="info-item"><div class="lbl">Monto inicial</div><div class="val">${fmt(c.monto)}</div></div>
-    <div class="info-item"><div class="lbl">Monto actual</div><div class="val" style="color:var(--grn)">${fmt(c.actMonto)}</div></div>
+    <div class="info-item"><div class="lbl">Monto actual</div><div class="val" style="color:var(--success)">${fmt(c.actMonto)}</div></div>
+    <div class="info-item"><div class="lbl">Alquiler vigente hoy</div><div class="val" style="color:var(--accent);font-weight:600">${fmt(calcAlquilerActual(c))}${calcAlquilerActual(c)!==c.actMonto?` <span class="badge b-yel" style="font-size:10px" title="Difiere del monto registrado — actualizá el contrato">⚠ revisar</span>`:''}</div></div>
     <div class="info-item"><div class="lbl">Depósito</div><div class="val">${fmt(c.dep)}</div></div>
     <div class="info-item"><div class="lbl">Tipo actualiz.</div><div class="val">${c.tipo}</div></div>
     <div class="info-item"><div class="lbl">Frecuencia</div><div class="val">${c.freq}</div></div>
     <div class="info-item"><div class="lbl">Garantía</div><div class="val">${c.gar}</div></div>
   </div>
   <div class="two-col">
-    <div class="card"><h3 style="margin-bottom:10px">Cronograma de cuotas</h3><div class="crono">${cronoRows}</div></div>
+    <div class="card"><div class="section-heading-accent">Cronograma de cuotas</div><div class="crono">${cronoRows}</div></div>
     <div>
-      <div class="card" style="margin-bottom:14px"><h3 style="margin-bottom:10px">Historial de actualizaciones</h3>
+      <div class="card" style="margin-bottom:16px"><div class="section-heading-accent">Historial de actualizaciones</div>
         ${updHist?`<div class="tbl-wrap"><table><thead><tr><th>Fecha</th><th>%</th><th>Nuevo monto</th></tr></thead><tbody>${updHist}</tbody></table></div>`:`<p class="text-muted text-sm">Sin actualizaciones</p>`}
       </div>
     </div>
@@ -573,6 +746,11 @@ function saveContrato(id){
   saveDB(DB); closeModalDirect(); renderContratos();
 }
 function delContrato(id){
+  const cobrosDelContrato = DB.cobros.filter(c=>c.contId===id);
+  if(cobrosDelContrato.length > 0){
+    alert(`Este contrato tiene ${cobrosDelContrato.length} pago(s) registrado(s). No se puede eliminar.`);
+    return;
+  }
   if(!confirm('¿Rescindir contrato?')) return;
   const c=getContract(id); if(c) c.estado='rescindido';
   saveDB(DB); renderContratos();
@@ -580,12 +758,12 @@ function delContrato(id){
 function modalUpdate(id){
   const c=getContract(id);
   openModal('Aplicar actualización',`
-    <p style="margin-bottom:12px;font-size:13px;color:var(--muted)">Contrato: ${getProp(c.propId).dir}<br>Monto actual: <strong style="color:var(--txt)">${fmt(c.actMonto)}</strong></p>
+    <p style="margin-bottom:14px;font-size:13px;color:var(--muted)">Contrato: ${getProp(c.propId).dir}<br>Monto actual: <strong style="color:var(--text)">${fmt(c.actMonto)}</strong></p>
     <div class="form-group"><label>Fecha de aplicación</label><input id="f-fecha-upd" type="date" value="${today()}"></div>
     <div class="form-group mt-1"><label>Porcentaje de aumento (%)</label><input id="f-pct-upd" type="number" placeholder="Ej: 25"></div>
-    <div id="upd-preview" style="margin:12px 0;padding:12px;background:var(--card);border-radius:8px;display:none">
-      <div class="text-muted text-sm">Nuevo monto</div>
-      <div id="upd-nuevo" style="font-size:20px;font-weight:700;color:var(--grn)"></div>
+    <div id="upd-preview" style="margin:14px 0;padding:14px;background:var(--tbl-header);border-left:3px solid var(--success);display:none">
+      <div class="text-muted text-sm" style="margin-bottom:4px;">Nuevo monto</div>
+      <div id="upd-nuevo" style="font-family:'Playfair Display',serif;font-size:22px;font-weight:400;color:var(--success)"></div>
     </div>
     <div class="flex gap-2 mt-1">
       <button class="btn btn-ghost" onclick="previewUpd('${id}')">Calcular</button>
@@ -606,7 +784,6 @@ function applyUpd(id){
   const nuevo=Math.round(c.actMonto*(1+pct/100));
   c.actMonto=nuevo;
   c.updates.push({fecha,pct,nuevo});
-  // update prop price
   const p=getProp(c.propId); if(p) p.precio=nuevo;
   saveDB(DB); closeModalDirect(); renderContratos();
 }
@@ -632,7 +809,7 @@ function renderInquilinos(tab='inq',selInqId){
           <td><span class="badge ${estB}">${est}</span></td>
           <td class="no-print">
             <a class="btn btn-teal btn-sm" href="https://wa.me/54${i.tel.replace(/\D/g,'')}?text=${encodeURIComponent('Hola '+i.nom+', te recordamos que tenés un pago pendiente.')}" target="_blank">WhatsApp</a>
-            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();editInq('${i.id}')">✎</button>
+            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();editInq('${i.id}')">Editar</button>
             <button class="btn btn-red btn-sm" onclick="event.stopPropagation();delInq('${i.id}')">✕</button>
           </td>
         </tr>`;
@@ -643,19 +820,22 @@ function renderInquilinos(tab='inq',selInqId){
       </table></div></div>`;
     }
   } else {
-    // Cobros tab
     const periodos=[...new Set(DB.cobros.map(cb=>cb.periodo))].sort().reverse();
     const selPer=periodos[0]||'2024-03';
     const cobros=DB.cobros.sort((a,b)=>b.periodo.localeCompare(a.periodo));
     const rows=cobros.map(cb=>{
       const inq=getInq(cb.inqId); const ct=getContract(cb.contId);
-      return `<tr>
+      const overdue=isCobroOverdue(cb);
+      const overdueTag=overdue?`<span class="badge b-red" style="margin-left:4px" title="Vencido — la fecha de cobro ya pasó">⚠ VENCIDO</span>`:'';
+      const rowStyle=overdue?'background:rgba(192,57,43,0.04);':'';
+      return `<tr style="${rowStyle}">
         <td>${inq.nom||'-'}</td><td>${cb.periodo}</td>
-        <td>${fmt(cb.monto)}</td><td>${cobroBadge(cb.estado)}</td>
+        <td>${fmt(cb.monto)}</td>
+        <td>${cobroBadge(cb.estado)}${overdueTag}</td>
         <td>${cb.fecha?fmtDate(cb.fecha):'-'}</td>
         <td>${cb.metodo||'-'}</td>
         <td class="no-print">
-          ${cb.estado!=='pagado'?`<button class="btn btn-grn btn-sm btn-teal" onclick="registrarPago('${cb.id}')">Cobrar</button>`:''}
+          ${cb.estado!=='pagado'?`<button class="btn btn-grn btn-sm" onclick="registrarPago('${cb.id}')">Cobrar</button>`:''}
           <button class="btn btn-ghost btn-sm" onclick="printRecibo('${cb.id}')">Recibo</button>
           <button class="btn btn-red btn-sm" onclick="delCobro('${cb.id}')">✕</button>
         </td>
@@ -663,6 +843,7 @@ function renderInquilinos(tab='inq',selInqId){
     }).join('');
     content=`<div class="flex gap-2 mt-1 mb-2 flex-wrap">
       <button class="btn btn-pri" onclick="newCobro()">+ Registrar cobro</button>
+      <button class="btn btn-ghost" onclick="reporteMensual()">📊 Reporte Mensual</button>
     </div>
     <div class="card"><div class="tbl-wrap"><table>
       <thead><tr><th>Inquilino</th><th>Período</th><th>Monto</th><th>Estado</th><th>Fecha</th><th>Método</th><th></th></tr></thead>
@@ -684,10 +865,19 @@ function renderInquilinos(tab='inq',selInqId){
 function renderInqDetail(id){
   const i=getInq(id); const ct=inqContract(id);
   const cobros=DB.cobros.filter(cb=>cb.inqId===id).sort((a,b)=>b.periodo.localeCompare(a.periodo));
-  const cRows=cobros.map(cb=>`<tr><td>${cb.periodo}</td><td>${fmt(cb.monto)}</td><td>${cobroBadge(cb.estado)}</td><td>${cb.fecha?fmtDate(cb.fecha):'-'}</td><td>${cb.metodo||'-'}</td></tr>`).join('');
-  return `<div class="detail-back" onclick="renderInquilinos('inq')">← Volver</div>
-  <div class="flex justify-between flex-wrap gap-2" style="margin-bottom:16px">
-    <div><h2>${i.nom}</h2><div class="text-muted text-sm">DNI ${i.dni} · ${i.tel}</div></div>
+  const cRows=cobros.map(cb=>{
+    const overdue=isCobroOverdue(cb);
+    const overdueTag=overdue?`<span class="badge b-red" style="margin-left:4px">⚠ VENCIDO</span>`:'';
+    return `<tr${overdue?' style="background:rgba(192,57,43,0.04)"':''}>
+      <td>${cb.periodo}</td><td>${fmt(cb.monto)}</td>
+      <td>${cobroBadge(cb.estado)}${overdueTag}</td>
+      <td>${cb.fecha?fmtDate(cb.fecha):'-'}</td>
+      <td>${cb.metodo||'-'}</td>
+    </tr>`;
+  }).join('');
+  return `<div class="detail-back" onclick="renderInquilinos('inq')">← Volver a Inquilinos</div>
+  <div class="flex justify-between flex-wrap gap-2" style="margin-bottom:20px">
+    <div><h2>${i.nom}</h2><div class="text-muted text-sm" style="margin-top:4px;">DNI ${i.dni} · ${i.tel}</div></div>
     <div class="flex gap-2">
       <a class="btn btn-teal btn-sm" href="https://wa.me/54${i.tel.replace(/\D/g,'')}?text=${encodeURIComponent('Hola '+i.nom+', recordatorio de pago.')}" target="_blank">WhatsApp</a>
       <button class="btn btn-ghost btn-sm" onclick="editInq('${id}')">Editar</button>
@@ -697,12 +887,13 @@ function renderInqDetail(id){
     <div class="info-item"><div class="lbl">Email</div><div class="val">${i.mail||'-'}</div></div>
     <div class="info-item"><div class="lbl">Garantía</div><div class="val">${i.garantia}</div></div>
     ${ct?`<div class="info-item"><div class="lbl">Propiedad</div><div class="val">${getProp(ct.propId).dir||'-'}</div></div>
-    <div class="info-item"><div class="lbl">Monto actual</div><div class="val">${fmt(ct.actMonto)}</div></div>`:''}
+    <div class="info-item"><div class="lbl">Monto registrado</div><div class="val">${fmt(ct.actMonto)}</div></div>
+    <div class="info-item"><div class="lbl">Alquiler vigente hoy</div><div class="val" style="color:var(--accent);font-weight:600">${fmt(calcAlquilerActual(ct))}</div></div>`:''}
   </div>
-  ${cobros.length?`<div class="card mt-2"><h3 style="margin-bottom:10px">Historial de pagos</h3><div class="tbl-wrap"><table>
+  ${cobros.length?`<div class="card mt-2"><div class="section-heading-accent">Historial de pagos</div><div class="tbl-wrap"><table>
     <thead><tr><th>Período</th><th>Monto</th><th>Estado</th><th>Fecha</th><th>Método</th></tr></thead>
     <tbody>${cRows}</tbody>
-  </table></div></div>`:'<div class="card mt-2 text-muted text-sm" style="padding:16px">Sin historial de cobros</div>'}`;
+  </table></div></div>`:'<div class="card mt-2 text-muted text-sm" style="padding:16px;background:var(--tbl-header)">Sin historial de cobros</div>'}`;
 }
 
 function inqForm(i={}){
@@ -728,6 +919,8 @@ function saveInq(id){
   saveDB(DB); closeModalDirect(); renderInquilinos('inq');
 }
 function delInq(id){
+  const ct=inqContract(id);
+  if(ct){ const fin=contractEnd(ct); alert(`Este inquilino tiene contrato activo hasta ${fmtDate(fin)}. Rescindí el contrato primero.`); return; }
   if(!confirm('¿Eliminar inquilino?')) return;
   DB.inqs=DB.inqs.filter(i=>i.id!==id); saveDB(DB); renderInquilinos('inq');
 }
@@ -758,13 +951,18 @@ function saveCobro(id){
   saveDB(DB); closeModalDirect(); renderInquilinos('cobros');
 }
 function delCobro(id){
-  if(!confirm('¿Eliminar cobro?')) return;
+  const cb=DB.cobros.find(c=>c.id===id);
+  if(cb && cb.estado==='pagado'){
+    if(!confirm(`Este cobro ya fue marcado como pagado (${fmt(cb.monto)}). ¿Eliminar igual?`)) return;
+  } else {
+    if(!confirm('¿Eliminar cobro?')) return;
+  }
   DB.cobros=DB.cobros.filter(c=>c.id!==id); saveDB(DB); renderInquilinos('cobros');
 }
 function registrarPago(id){
   const cb=DB.cobros.find(c=>c.id===id); if(!cb) return;
   openModal('Registrar pago',`
-    <p style="margin-bottom:12px;font-size:13px;color:var(--muted)">Inquilino: <strong style="color:var(--txt)">${getInq(cb.inqId).nom}</strong><br>Monto: <strong style="color:var(--txt)">${fmt(cb.monto)}</strong></p>
+    <p style="margin-bottom:14px;font-size:13px;color:var(--muted)">Inquilino: <strong style="color:var(--text)">${getInq(cb.inqId).nom}</strong><br>Monto: <strong style="color:var(--text)">${fmt(cb.monto)}</strong></p>
     <div class="form-grid">
       <div class="form-group"><label>Fecha</label><input id="f-fecha" type="date" value="${today()}"></div>
       <div class="form-group"><label>Método</label><select id="f-metodo"><option>transferencia</option><option>efectivo</option><option>cheque</option></select></div>
@@ -788,23 +986,23 @@ function printRecibo(id){
   const inq=getInq(cb.inqId); const ct=getContract(cb.contId);
   const prop=ct?getProp(ct.propId):{};
   const z=byId('print-zone');
-  z.innerHTML=`<div style="padding:40px;font-family:sans-serif;color:#000;background:#fff">
+  z.innerHTML=`<div style="padding:40px;font-family:'Source Sans 3',sans-serif;color:#000;background:#fff">
     <div style="display:flex;justify-content:space-between;margin-bottom:24px">
-      <div><h1 style="font-size:24px;margin:0">Aura Prop</h1><p style="color:#666;margin:0">Administración de Alquileres</p></div>
-      <div style="text-align:right"><h2 style="margin:0">RECIBO DE PAGO</h2><p style="color:#666">${fmtDate(cb.fecha||today())}</p></div>
+      <div><h1 style="font-family:'Playfair Display',serif;font-size:24px;margin:0;font-weight:400">Aura Prop</h1><p style="color:#666;margin:0;font-size:12px;letter-spacing:0.04em;text-transform:uppercase">Administración de Alquileres</p></div>
+      <div style="text-align:right"><h2 style="margin:0;font-family:'Playfair Display',serif;font-weight:400">RECIBO DE PAGO</h2><p style="color:#666">${fmtDate(cb.fecha||today())}</p></div>
     </div>
-    <hr style="margin:0 0 20px">
+    <hr style="margin:0 0 20px;border-color:#E2DDD6">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
       <div><strong>Inquilino:</strong><br>${inq.nom}<br>DNI: ${inq.dni}</div>
       <div><strong>Propiedad:</strong><br>${prop.dir||'-'}</div>
     </div>
     <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
-      <tr style="background:#f5f5f5"><th style="text-align:left;padding:8px;border:1px solid #ddd">Concepto</th><th style="text-align:right;padding:8px;border:1px solid #ddd">Monto</th></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd">Alquiler período ${cb.periodo}</td><td style="text-align:right;padding:8px;border:1px solid #ddd">${fmt(cb.monto)}</td></tr>
+      <tr style="background:#F0EDE6"><th style="text-align:left;padding:8px;border:1px solid #E2DDD6">Concepto</th><th style="text-align:right;padding:8px;border:1px solid #E2DDD6">Monto</th></tr>
+      <tr><td style="padding:8px;border:1px solid #E2DDD6">Alquiler período ${cb.periodo}</td><td style="text-align:right;padding:8px;border:1px solid #E2DDD6">${fmt(cb.monto)}</td></tr>
     </table>
-    <div style="text-align:right;font-size:18px;font-weight:bold">Total: ${fmt(cb.monto)}</div>
+    <div style="text-align:right;font-size:18px;font-weight:600">Total: ${fmt(cb.monto)}</div>
     <div style="margin-top:8px;color:#666;font-size:13px">Método de pago: ${cb.metodo||'-'}</div>
-    <hr style="margin:30px 0 20px">
+    <hr style="margin:30px 0 20px;border-color:#E2DDD6">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:center">
       <div><div style="border-top:1px solid #000;padding-top:8px;margin-top:40px">Firma inquilino</div></div>
       <div><div style="border-top:1px solid #000;padding-top:8px;margin-top:40px">Firma administración</div></div>
@@ -830,7 +1028,7 @@ function renderPropietarios(tab='owners',selId){
           <td>${o.com}%</td>
           <td class="no-print">
             <button class="btn btn-teal btn-sm" onclick="event.stopPropagation();modalLiquidacion('${o.id}')">Liquidar</button>
-            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();editOwner('${o.id}')">✎</button>
+            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();editOwner('${o.id}')">Editar</button>
             <button class="btn btn-red btn-sm" onclick="event.stopPropagation();delOwner('${o.id}')">✕</button>
           </td>
         </tr>`;
@@ -841,7 +1039,6 @@ function renderPropietarios(tab='owners',selId){
       </table></div></div>`;
     }
   } else {
-    // liquidaciones tab
     const rows=DB.liqds.map(l=>{
       const o=getOwner(l.ownId);
       return `<tr>
@@ -875,9 +1072,9 @@ function renderOwnerDetail(id){
     const inq=ct?getInq(ct.inqId):null;
     return `<tr><td>${p.dir}</td><td>${p.tipo}</td><td>${stateBadge(p.estado)}</td><td>${ct?fmt(ct.actMonto):'-'}</td><td>${inq?inq.nom:'-'}</td></tr>`;
   }).join('');
-  return `<div class="detail-back" onclick="renderPropietarios('owners')">← Volver</div>
-  <div class="flex justify-between flex-wrap gap-2" style="margin-bottom:16px">
-    <div><h2>${o.nom}</h2><div class="text-muted text-sm">${o.tel} · ${o.mail}</div></div>
+  return `<div class="detail-back" onclick="renderPropietarios('owners')">← Volver a Propietarios</div>
+  <div class="flex justify-between flex-wrap gap-2" style="margin-bottom:20px">
+    <div><h2>${o.nom}</h2><div class="text-muted text-sm" style="margin-top:4px;">${o.tel} · ${o.mail}</div></div>
     <div class="flex gap-2">
       <button class="btn btn-teal" onclick="modalLiquidacion('${id}')">Generar liquidación</button>
       <button class="btn btn-ghost btn-sm" onclick="editOwner('${id}')">Editar</button>
@@ -887,7 +1084,7 @@ function renderOwnerDetail(id){
     <div class="info-item"><div class="lbl">CBU</div><div class="val" style="font-size:12px">${o.cbu||'-'}</div></div>
     <div class="info-item"><div class="lbl">Comisión</div><div class="val">${o.com}%</div></div>
   </div>
-  <div class="card mt-2"><h3 style="margin-bottom:10px">Propiedades</h3><div class="tbl-wrap"><table>
+  <div class="card mt-2"><div class="section-heading-accent">Propiedades</div><div class="tbl-wrap"><table>
     <thead><tr><th>Dirección</th><th>Tipo</th><th>Estado</th><th>Alquiler</th><th>Inquilino</th></tr></thead>
     <tbody>${propRows||'<tr><td colspan="5" class="text-muted" style="text-align:center">Sin propiedades</td></tr>'}</tbody>
   </table></div></div>`;
@@ -924,7 +1121,6 @@ function modalLiquidacion(ownId){
   const o=getOwner(ownId);
   const props=DB.props.filter(p=>p.propId===ownId&&p.estado==='Alquilada');
   if(!props.length) return alert('Este propietario no tiene propiedades alquiladas');
-  // calculate
   const periodo='2024-03';
   let bruto=0, expTotal=0;
   const lineas=props.map(p=>{
@@ -936,18 +1132,18 @@ function modalLiquidacion(ownId){
   const com=Math.round(bruto*(o.com/100));
   const neto=bruto-com-expTotal;
   openModal(`Liquidación — ${o.nom}`,`
-    <div style="margin-bottom:12px;font-size:13px;color:var(--muted)">Período: <strong style="color:var(--txt)">${periodo}</strong></div>
-    <div class="tbl-wrap" style="margin-bottom:14px"><table>
+    <div style="margin-bottom:14px;font-size:13px;color:var(--muted)">Período: <strong style="color:var(--text)">${periodo}</strong></div>
+    <div class="tbl-wrap" style="margin-bottom:16px"><table>
       <thead><tr><th>Propiedad</th><th>Alquiler</th><th>Cobrado</th><th>Expensas</th></tr></thead>
       <tbody>${lineas}</tbody>
     </table></div>
-    <div class="card" style="background:var(--bg)">
-      <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span>Cobrado bruto</span><strong>${fmt(bruto)}</strong></div>
-      <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span>Comisión (${o.com}%)</span><span style="color:var(--red)">− ${fmt(com)}</span></div>
-      <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span>Expensas</span><span style="color:var(--red)">− ${fmt(expTotal)}</span></div>
-      <div class="flex justify-between" style="padding:8px 0;font-size:16px"><strong>Neto a transferir</strong><strong style="color:var(--grn)">${fmt(neto)}</strong></div>
+    <div style="background:var(--tbl-header);border:1px solid var(--brd);border-radius:var(--rad);padding:14px">
+      <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span style="color:var(--muted);font-size:13px">Cobrado bruto</span><strong>${fmt(bruto)}</strong></div>
+      <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span style="color:var(--muted);font-size:13px">Comisión (${o.com}%)</span><span style="color:var(--danger)">− ${fmt(com)}</span></div>
+      <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span style="color:var(--muted);font-size:13px">Expensas</span><span style="color:var(--danger)">− ${fmt(expTotal)}</span></div>
+      <div class="flex justify-between" style="padding:10px 0"><strong style="font-family:'Playfair Display',serif">Neto a transferir</strong><strong style="font-family:'Playfair Display',serif;font-size:18px;color:var(--success)">${fmt(neto)}</strong></div>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin:8px 0">CBU: ${o.cbu}</div>
+    <div style="font-size:12px;color:var(--muted);margin:10px 0">CBU: ${o.cbu}</div>
     <div class="flex gap-2 mt-1">
       <button class="btn btn-pri" onclick="saveLiq('${ownId}','${periodo}',${bruto},${com},${expTotal},${neto})">Guardar liquidación</button>
       <button class="btn btn-ghost btn-sm" onclick="printLiqInline('${ownId}','${periodo}',${bruto},${com},${expTotal},${neto})">Imprimir</button>
@@ -965,20 +1161,20 @@ function printLiq(id){
 function printLiqInline(ownId,periodo,bruto,com,exp,neto){
   const o=getOwner(ownId);
   const z=byId('print-zone');
-  z.innerHTML=`<div style="padding:40px;font-family:sans-serif;color:#000">
+  z.innerHTML=`<div style="padding:40px;font-family:'Source Sans 3',sans-serif;color:#000">
     <div style="display:flex;justify-content:space-between;margin-bottom:24px">
-      <div><h1>Aura Prop</h1><p style="color:#666">Liquidación mensual</p></div>
-      <div style="text-align:right"><h2>LIQUIDACIÓN</h2><p>${periodo} · ${fmtDate(today())}</p></div>
-    </div><hr style="margin:0 0 20px">
+      <div><h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:400">Aura Prop</h1><p style="color:#666;font-size:12px;text-transform:uppercase;letter-spacing:0.04em">Liquidación mensual</p></div>
+      <div style="text-align:right"><h2 style="font-family:'Playfair Display',serif;font-weight:400">LIQUIDACIÓN</h2><p>${periodo} · ${fmtDate(today())}</p></div>
+    </div><hr style="margin:0 0 20px;border-color:#E2DDD6">
     <div><strong>Propietario:</strong> ${o.nom}<br><strong>CBU:</strong> ${o.cbu}</div>
     <table style="width:100%;border-collapse:collapse;margin:20px 0">
-      <tr style="background:#f5f5f5"><th style="text-align:left;padding:8px;border:1px solid #ddd">Concepto</th><th style="text-align:right;padding:8px;border:1px solid #ddd">Monto</th></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd">Alquileres cobrados</td><td style="text-align:right;padding:8px;border:1px solid #ddd">${fmt(bruto)}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd">Comisión administración (${o.com}%)</td><td style="text-align:right;padding:8px;border:1px solid #ddd">− ${fmt(com)}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd">Expensas / otros</td><td style="text-align:right;padding:8px;border:1px solid #ddd">− ${fmt(exp)}</td></tr>
-      <tr style="font-weight:bold"><td style="padding:8px;border:1px solid #ddd">NETO A TRANSFERIR</td><td style="text-align:right;padding:8px;border:1px solid #ddd">${fmt(neto)}</td></tr>
+      <tr style="background:#F0EDE6"><th style="text-align:left;padding:8px;border:1px solid #E2DDD6">Concepto</th><th style="text-align:right;padding:8px;border:1px solid #E2DDD6">Monto</th></tr>
+      <tr><td style="padding:8px;border:1px solid #E2DDD6">Alquileres cobrados</td><td style="text-align:right;padding:8px;border:1px solid #E2DDD6">${fmt(bruto)}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #E2DDD6">Comisión administración (${o.com}%)</td><td style="text-align:right;padding:8px;border:1px solid #E2DDD6">− ${fmt(com)}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #E2DDD6">Expensas / otros</td><td style="text-align:right;padding:8px;border:1px solid #E2DDD6">− ${fmt(exp)}</td></tr>
+      <tr style="font-weight:bold"><td style="padding:8px;border:1px solid #E2DDD6">NETO A TRANSFERIR</td><td style="text-align:right;padding:8px;border:1px solid #E2DDD6">${fmt(neto)}</td></tr>
     </table>
-    <hr style="margin:20px 0">
+    <hr style="margin:20px 0;border-color:#E2DDD6">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:center">
       <div><div style="border-top:1px solid #000;padding-top:8px;margin-top:40px">Firma propietario</div></div>
       <div><div style="border-top:1px solid #000;padding-top:8px;margin-top:40px">Firma administración</div></div>
@@ -987,14 +1183,42 @@ function printLiqInline(ownId,periodo,bruto,com,exp,neto){
   window.print();
 }
 
+// ── HELPERS COBROS ────────────────────────────────────────────────────
+// Determina si un cobro pendiente está vencido según frecuencia del contrato
+// La fecha de vencimiento se calcula como: mismo día del inicio del contrato en el mes del período
+function isCobroOverdue(cb){
+  if(cb.estado==='pagado') return false;
+  const ct=getContract(cb.contId);
+  if(!ct||!cb.periodo) return false;
+  // Calcular fecha de vencimiento: día del inicio del contrato en el mes del período
+  const diaInicio=new Date(ct.inicio+'T00:00:00').getDate();
+  const [y,m]=cb.periodo.split('-');
+  const maxDay=new Date(+y,+m,0).getDate(); // último día del mes
+  const dia=Math.min(diaInicio,maxDay);
+  const fechaVenc=`${y}-${m}-${String(dia).padStart(2,'0')}`;
+  return today()>fechaVenc;
+}
+
+// Calcula el alquiler actual basado en monto inicial + actualizaciones aplicadas hasta hoy
+function calcAlquilerActual(c){
+  if(!c.updates||!c.updates.length) return c.monto;
+  const todayStr=today();
+  // Aplicar actualizaciones cuya fecha ya pasó, en orden cronológico
+  const aplicadas=c.updates.filter(u=>u.fecha<=todayStr).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  if(!aplicadas.length) return c.monto;
+  return aplicadas[aplicadas.length-1].nuevo;
+}
+
 // ── REPORTES ──────────────────────────────────────────────────────────
+let reportesMes = today().slice(0,7);
+
 function renderReportes(){
   const el=byId('page-reportes');
-  const mes='2024-03';
+  const mes=reportesMes;
+  const mesLabel=new Date(mes+'-01').toLocaleDateString('es-AR',{month:'long',year:'numeric'});
   const cobsMes=DB.cobros.filter(c=>c.periodo===mes);
   const ingresado=cobsMes.filter(c=>c.estado==='pagado').reduce((s,c)=>s+c.monto,0);
   const pendiente=cobsMes.filter(c=>c.estado!=='pagado').reduce((s,c)=>s+c.monto,0);
-  // comisiones: sum per owner
   let comTotal=0;
   DB.owners.forEach(o=>{
     const props=DB.props.filter(p=>p.propId===o.id&&p.estado==='Alquilada');
@@ -1004,9 +1228,8 @@ function renderReportes(){
       comTotal+=Math.round(cob*(o.com/100));
     });
   });
-  const ctNuevos=DB.contracts.filter(c=>c.inicio&&c.inicio.startsWith('2024')).length;
+  const ctNuevos=DB.contracts.filter(c=>c.inicio&&c.inicio.startsWith(mes.slice(0,4))).length;
   const ctVenc=DB.contracts.filter(c=>c.estado==='activo'&&daysToEnd(c)<0).length;
-  // breakdown by property
   const breakdown=DB.contracts.filter(c=>c.estado==='activo').map(c=>{
     const p=getProp(c.propId); const inq=getInq(c.inqId);
     const cob=cobsMes.filter(cb=>cb.contId===c.id&&cb.estado==='pagado').reduce((s,cb)=>s+cb.monto,0);
@@ -1014,38 +1237,363 @@ function renderReportes(){
     return `<tr><td>${p.dir||'-'}</td><td>${inq.nom||'-'}</td><td>${fmt(c.actMonto)}</td><td>${cob?fmt(cob):'—'}</td><td>${pend?fmt(pend):'—'}</td></tr>`;
   }).join('');
 
+  // Libro Mayor: todos los cobros ordenados por fecha, agrupados por propiedad/inquilino
+  const todosCobros=[...DB.cobros].sort((a,b)=>{
+    const fa=a.fecha||a.periodo+'-01'; const fb=b.fecha||b.periodo+'-01';
+    return fb.localeCompare(fa);
+  });
+  const libroRows=todosCobros.map(cb=>{
+    const inq=getInq(cb.inqId);
+    const ct=getContract(cb.contId);
+    const prop=ct?getProp(ct.propId):{};
+    const isOverdue=cb.estado==='pendiente'&&isCobroOverdue(cb);
+    const overdueTag=isOverdue?`<span class="badge b-red" style="margin-left:4px">VENCIDO</span>`:'';
+    return `<tr>
+      <td>${cb.fecha?fmtDate(cb.fecha):'-'}</td>
+      <td><strong>${inq.nom||'-'}</strong></td>
+      <td class="text-muted text-sm">${prop.dir||'-'}</td>
+      <td>${fmt(cb.monto)}</td>
+      <td>${cb.metodo||'-'}</td>
+      <td>${cb.periodo||'-'}</td>
+      <td>${cobroBadge(cb.estado)}${overdueTag}</td>
+    </tr>`;
+  }).join('');
+
   el.innerHTML=`
-  <div class="pg-hd"><h2>Reportes & Caja</h2><span class="text-muted text-sm">Marzo 2024</span></div>
+  <div class="pg-hd">
+    <h2>Reportes & Caja</h2>
+    <div class="flex gap-2 items-center flex-wrap">
+      <input type="month" value="${mes}" onchange="reportesMes=this.value;renderReportes()" style="padding:6px 10px;border:1px solid var(--brd);border-radius:var(--rad);font-size:12px;background:var(--surf);color:var(--text)">
+      <span class="text-muted text-sm" style="font-size:13px;">${mesLabel}</span>
+    </div>
+  </div>
   <div class="kpi-grid">
-    <div class="kpi"><div class="kpi-label">Ingresos cobrados</div><div class="kpi-val" style="color:var(--grn)">${fmt(ingresado)}</div><div class="kpi-sub">alquileres pagados</div></div>
-    <div class="kpi"><div class="kpi-label">Comisiones generadas</div><div class="kpi-val" style="color:var(--pri)">${fmt(comTotal)}</div><div class="kpi-sub">ingresos inmobiliaria</div></div>
-    <div class="kpi"><div class="kpi-label">Cobros pendientes</div><div class="kpi-val" style="color:var(--yel)">${fmt(pendiente)}</div><div class="kpi-sub">por cobrar</div></div>
-    <div class="kpi"><div class="kpi-label">Contratos nuevos</div><div class="kpi-val" style="color:var(--teal)">${ctNuevos}</div><div class="kpi-sub">${ctVenc} vencidos</div></div>
+    <div class="kpi"><div class="kpi-label">Ingresos cobrados</div><div class="kpi-val" style="color:var(--success)">${fmt(ingresado)}</div><div class="kpi-sub">alquileres pagados</div></div>
+    <div class="kpi"><div class="kpi-label">Comisiones generadas</div><div class="kpi-val" style="color:var(--primary)">${fmt(comTotal)}</div><div class="kpi-sub">ingresos inmobiliaria</div></div>
+    <div class="kpi"><div class="kpi-label">Cobros pendientes</div><div class="kpi-val" style="color:var(--warning)">${fmt(pendiente)}</div><div class="kpi-sub">por cobrar</div></div>
+    <div class="kpi"><div class="kpi-label">Contratos nuevos ${mes.slice(0,4)}</div><div class="kpi-val" style="color:var(--accent)">${ctNuevos}</div><div class="kpi-sub">${ctVenc} vencidos</div></div>
   </div>
   <div class="card">
-    <h3 style="margin-bottom:12px">Detalle por propiedad</h3>
+    <div class="section-heading-accent">Detalle por propiedad — ${mesLabel}</div>
     <div class="tbl-wrap"><table>
-      <thead><tr><th>Propiedad</th><th>Inquilino</th><th>Alquiler</th><th>Cobrado</th><th>Pendiente</th></tr></thead>
-      <tbody>${breakdown}</tbody>
+      <thead><tr><th>Propiedad</th><th>Inquilino</th><th>Alquiler actual</th><th>Cobrado</th><th>Pendiente</th></tr></thead>
+      <tbody>${breakdown||'<tr><td colspan="5" class="text-muted" style="text-align:center;padding:16px">Sin contratos activos</td></tr>'}</tbody>
+    </table></div>
+  </div>
+  <div class="card" style="margin-top:0">
+    <div class="section-heading-accent">Libro Mayor — Todos los cobros</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Fecha pago</th><th>Inquilino</th><th>Propiedad</th><th>Monto</th><th>Método</th><th>Período</th><th>Estado</th></tr></thead>
+      <tbody>${libroRows||'<tr><td colspan="7" class="text-muted" style="text-align:center;padding:16px">Sin cobros registrados</td></tr>'}</tbody>
     </table></div>
   </div>
   <div class="two-col">
     <div class="card">
-      <h3 style="margin-bottom:10px">Estado de cobros — Marzo 2024</h3>
+      <div class="section-heading-accent">Estado de cobros — ${mesLabel}</div>
       ${['pagado','pendiente','vencido','parcial'].map(e=>{
         const tot=DB.cobros.filter(c=>c.estado===e).reduce((s,c)=>s+c.monto,0);
         const cnt=DB.cobros.filter(c=>c.estado===e).length;
-        return cnt?`<div class="flex justify-between items-center" style="padding:8px 0;border-bottom:1px solid var(--brd)"><span>${cobroBadge(e)} <span class="text-muted text-sm">(${cnt})</span></span><strong>${fmt(tot)}</strong></div>`:''
+        return cnt?`<div class="flex justify-between items-center" style="padding:9px 0;border-bottom:1px solid var(--brd)"><span>${cobroBadge(e)} <span class="text-muted text-sm">(${cnt})</span></span><strong>${fmt(tot)}</strong></div>`:''
       }).join('')}
     </div>
     <div class="card">
-      <h3 style="margin-bottom:10px">Distribución por tipo</h3>
+      <div class="section-heading-accent">Distribución por tipo</div>
       ${['Dpto','Casa','Local','Oficina','Cochera'].map(t=>{
         const cnt=DB.props.filter(p=>p.tipo===t&&p.estado==='Alquilada').length;
-        return cnt?`<div class="flex justify-between items-center" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span class="text-sm">${t}</span><span class="badge b-pri">${cnt}</span></div>`:''
+        return cnt?`<div class="flex justify-between items-center" style="padding:8px 0;border-bottom:1px solid var(--brd)"><span class="text-sm">${t}</span><span class="badge b-pri">${cnt}</span></div>`:''
       }).join('')}
     </div>
   </div>`;
+}
+
+// ── NOTIFICACIONES ────────────────────────────────────────────────────
+function getNotificaciones(){
+  const notifs=[];
+  // Contratos próximos a vencer (≤30 días) o vencidos
+  DB.contracts.filter(c=>c.estado==='activo').forEach(c=>{
+    const days=daysToEnd(c);
+    const propName=getProp(c.propId).dir||c.propId;
+    if(days<0){
+      notifs.push({msg:`🔴 Contrato ${propName} VENCIDO`,tipo:'vencido'});
+    } else if(days<=30){
+      notifs.push({msg:`📋 Contrato ${propName} vence en ${days} días`,tipo:'proximo'});
+    }
+  });
+  // Cobros pendientes por contrato activo
+  DB.contracts.filter(c=>c.estado==='activo').forEach(c=>{
+    const propName=getProp(c.propId).dir||c.propId;
+    const pendCount=(c.cobros||[]).filter(cb=>cb.estado==='pendiente').length;
+    if(pendCount>0){
+      notifs.push({msg:`💰 ${propName}: ${pendCount} cobros pendientes`,tipo:'cobro'});
+    }
+  });
+  return notifs;
+}
+
+function renderNotifBadge(){
+  const notifs=getNotificaciones();
+  // Update badge on "contratos" nav link
+  document.querySelectorAll('[data-page="contratos"]').forEach(a=>{
+    const old=a.querySelector('.notif-badge');
+    if(old) old.remove();
+    if(notifs.length>0){
+      const span=document.createElement('span');
+      span.className='notif-badge';
+      span.textContent=notifs.length;
+      a.appendChild(span);
+    }
+  });
+  // Render alert panel in dashboard
+  const panel=document.getElementById('alertas-panel');
+  if(!panel) return;
+  if(!notifs.length){ panel.innerHTML=''; return; }
+  const typeClass={vencido:'alert-red',proximo:'alert-yel',cobro:'alert-teal'};
+  panel.innerHTML=notifs.map(n=>`<div class="alert ${typeClass[n.tipo]||'alert-yel'}">${n.msg}</div>`).join('');
+}
+
+// ── REPORTE MENSUAL (EXCEL) ───────────────────────────────────────────
+function reporteMensual(){
+  const mes=prompt('Mes a exportar (YYYY-MM):',today().slice(0,7));
+  if(!mes) return;
+  const rows=[];
+  DB.contracts.forEach(c=>{
+    const propName=getProp(c.propId).dir||c.propId;
+    const inqName=getInq(c.inqId).nom||c.inqId;
+    (c.cobros||[]).forEach(cb=>{
+      if(cb.mes===mes || (cb.fecha&&cb.fecha.startsWith(mes))){
+        rows.push({Propiedad:propName,Inquilino:inqName,'Mes Cobro':cb.mes||mes,Monto:cb.monto,Estado:cb.estado,Fecha:cb.fecha||''});
+      }
+    });
+  });
+  // Also check DB.cobros (flat array)
+  DB.cobros.forEach(cb=>{
+    if(cb.periodo===mes || (cb.fecha&&cb.fecha.startsWith(mes))){
+      const ct=getContract(cb.contId);
+      const propName=ct?getProp(ct.propId).dir||ct.propId:'-';
+      const inqName=getInq(cb.inqId).nom||cb.inqId;
+      // avoid duplicates from contract.cobros
+      const already=rows.find(r=>r.Propiedad===propName&&r['Mes Cobro']===(cb.periodo||mes)&&r.Monto===cb.monto);
+      if(!already){
+        rows.push({Propiedad:propName,Inquilino:inqName,'Mes Cobro':cb.periodo||mes,Monto:cb.monto,Estado:cb.estado,Fecha:cb.fecha||''});
+      }
+    }
+  });
+
+  const totalCobrado=rows.filter(r=>r.Estado==='pagado').reduce((s,r)=>s+r.Monto,0);
+  const totalPendiente=rows.filter(r=>r.Estado!=='pagado').reduce((s,r)=>s+r.Monto,0);
+  const ctActivos=DB.contracts.filter(c=>c.estado==='activo').length;
+  const nProps=DB.props.length;
+
+  const wb=XLSX.utils.book_new();
+  const ws1=XLSX.utils.json_to_sheet(rows.length?rows:[{Propiedad:'Sin datos',Inquilino:'',  'Mes Cobro':mes,Monto:0,Estado:'',Fecha:''}]);
+  XLSX.utils.book_append_sheet(wb,ws1,'Cobros del Mes');
+
+  const resumen=[
+    {'Indicador':'Total cobrado (pagados)','Valor':totalCobrado},
+    {'Indicador':'Total pendiente','Valor':totalPendiente},
+    {'Indicador':'N° contratos activos','Valor':ctActivos},
+    {'Indicador':'N° propiedades','Valor':nProps}
+  ];
+  const ws2=XLSX.utils.json_to_sheet(resumen);
+  XLSX.utils.book_append_sheet(wb,ws2,'Resumen');
+
+  XLSX.writeFile(wb,`reporte-inmobiliaria-${mes}.xlsx`);
+}
+
+// ── IMPRIMIR CONTRATO PDF ─────────────────────────────────────────────
+function imprimirContrato(id){
+  const c=getContract(id); if(!c) return;
+  const p=getProp(c.propId); const inq=getInq(c.inqId); const ow=getOwner(p.propId);
+  const z=byId('print-zone');
+  z.innerHTML=`<div style="padding:48px 56px;font-family:'Source Sans 3',sans-serif;color:#000;background:#fff;max-width:800px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:36px;border-bottom:2px solid #1A2744;padding-bottom:20px;">
+      <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#8B6914;margin-bottom:6px;">Administración de Propiedades</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#1A2744;margin:0 0 4px;">CONTRATO DE LOCACIÓN</h1>
+      <div style="font-size:12px;color:#64748B;">Generado el ${fmtDate(today())}</div>
+    </div>
+    <div style="margin-bottom:24px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">INMUEBLE</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
+        <div><strong>Dirección:</strong><br>${p.dir}</div>
+        <div><strong>Tipo:</strong> ${p.tipo} · ${p.m2} m²</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+      <div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">PROPIETARIO / LOCADOR</h3>
+        <div style="font-size:13px;line-height:1.8;">
+          <div><strong>Nombre:</strong> ${ow.nom||'-'}</div>
+          <div><strong>Teléfono:</strong> ${ow.tel||'-'}</div>
+          <div><strong>Email:</strong> ${ow.mail||'-'}</div>
+          <div><strong>CBU:</strong> ${ow.cbu||'-'}</div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">INQUILINO / LOCATARIO</h3>
+        <div style="font-size:13px;line-height:1.8;">
+          <div><strong>Nombre:</strong> ${inq.nom||'-'}</div>
+          <div><strong>DNI:</strong> ${inq.dni||'-'}</div>
+          <div><strong>Teléfono:</strong> ${inq.tel||'-'}</div>
+          <div><strong>Email:</strong> ${inq.mail||'-'}</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:24px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">CONDICIONES DE LA LOCACIÓN</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <tr style="background:#F0EDE6;"><th style="text-align:left;padding:8px 12px;border:1px solid #E2DDD6;">Concepto</th><th style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">Detalle</th></tr>
+        <tr><td style="padding:8px 12px;border:1px solid #E2DDD6;">Monto mensual inicial</td><td style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">${fmt(c.monto)}</td></tr>
+        <tr><td style="padding:8px 12px;border:1px solid #E2DDD6;">Monto mensual actual</td><td style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">${fmt(c.actMonto)}</td></tr>
+        <tr><td style="padding:8px 12px;border:1px solid #E2DDD6;">Depósito de garantía</td><td style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">${fmt(c.dep)}</td></tr>
+        <tr><td style="padding:8px 12px;border:1px solid #E2DDD6;">Fecha de inicio</td><td style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">${fmtDate(c.inicio)}</td></tr>
+        <tr><td style="padding:8px 12px;border:1px solid #E2DDD6;">Fecha de vencimiento</td><td style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">${fmtDate(contractEnd(c))}</td></tr>
+        <tr><td style="padding:8px 12px;border:1px solid #E2DDD6;">Duración</td><td style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">${c.dur} meses</td></tr>
+        <tr><td style="padding:8px 12px;border:1px solid #E2DDD6;">Tipo de actualización</td><td style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">${c.tipo} — ${c.freq}</td></tr>
+        <tr><td style="padding:8px 12px;border:1px solid #E2DDD6;">Garantía</td><td style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">${c.gar}</td></tr>
+      </table>
+    </div>
+    <div style="margin-bottom:40px;font-size:12px;color:#64748B;line-height:1.6;border:1px solid #E2DDD6;padding:14px;background:#FDFCFA;">
+      <strong style="color:#1A2744;">Condiciones generales:</strong> El locatario se compromete a abonar el canon locativo dentro de los primeros 5 días hábiles de cada mes. El incumplimiento generará intereses punitorios. El locatario no podrá subalquilar ni ceder el contrato sin consentimiento escrito del locador. Al finalizar el contrato, el inmueble deberá ser devuelto en las mismas condiciones en que fue recibido.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:60px;">
+      <div style="text-align:center;">
+        <div style="border-top:1px solid #1A2744;padding-top:8px;margin-top:60px;font-size:12px;">
+          <strong>${ow.nom||'Propietario'}</strong><br>Propietario / Locador<br>DNI: _______________
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <div style="border-top:1px solid #1A2744;padding-top:8px;margin-top:60px;font-size:12px;">
+          <strong>${inq.nom||'Inquilino'}</strong><br>Inquilino / Locatario<br>DNI: ${inq.dni||'_______________'}
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:30px;">
+      <div style="border-top:1px solid #1A2744;padding-top:8px;margin-top:60px;font-size:12px;display:inline-block;min-width:250px;">
+        Administración — Aura Prop<br>Fecha: _______________
+      </div>
+    </div>
+  </div>`;
+  window.print();
+}
+
+// ── MANTENIMIENTO ─────────────────────────────────────────────────────
+function renderMantList(propId){
+  const p=getProp(propId);
+  const mant=p.mantenimiento||[];
+  if(!mant.length) return '<p class="text-muted text-sm" style="padding:8px 0;">Sin registros de mantenimiento.</p>';
+  const totalCosto=mant.reduce((s,m)=>s+m.costo,0);
+  const estadoColor={pendiente:'b-yel','en proceso':'b-pri',completado:'b-grn'};
+  const rows=mant.slice().reverse().map(m=>`<tr>
+    <td>${fmtDate(m.fecha)}</td>
+    <td>${m.desc}</td>
+    <td class="text-muted text-sm">${m.proveedor||'-'}</td>
+    <td>${fmt(m.costo)}</td>
+    <td><span class="badge ${estadoColor[m.estado]||'b-muted'}">${m.estado}</span></td>
+    <td><button class="btn btn-red btn-sm" onclick="delMant('${propId}','${m.id}')">✕</button></td>
+  </tr>`).join('');
+  return `<div class="tbl-wrap"><table>
+    <thead><tr><th>Fecha</th><th>Descripción</th><th>Proveedor</th><th>Costo</th><th>Estado</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr><td colspan="3" style="padding:8px 14px;font-weight:600;font-size:12px;color:var(--muted);">Total costos</td><td style="padding:8px 14px;font-weight:600;color:var(--danger);">${fmt(totalCosto)}</td><td colspan="2"></td></tr></tfoot>
+  </table></div>`;
+}
+
+function openMantModal(propId){
+  openModal('Registrar Mantenimiento',`
+    <div class="form-grid">
+      <div class="form-group"><label>Fecha</label><input id="f-mant-fecha" type="date" value="${today()}"></div>
+      <div class="form-group"><label>Estado</label><select id="f-mant-estado"><option>pendiente</option><option>en proceso</option><option>completado</option></select></div>
+      <div class="form-group full"><label>Descripción del trabajo</label><input id="f-mant-desc" placeholder="Ej: Reparación cañería"></div>
+      <div class="form-group"><label>Proveedor / Empresa</label><input id="f-mant-prov" placeholder="Ej: Plomero Martínez"></div>
+      <div class="form-group"><label>Costo (ARS)</label><input id="f-mant-costo" type="number" placeholder="0"></div>
+    </div>
+    <div class="flex gap-2 mt-2">
+      <button class="btn btn-pri" onclick="saveMant('${propId}')">Guardar</button>
+      <button class="btn btn-ghost" onclick="closeModalDirect()">Cancelar</button>
+    </div>`);
+}
+
+function saveMant(propId){
+  const desc=byId('f-mant-desc').value.trim();
+  if(!desc) return alert('Ingresá una descripción');
+  const p=getProp(propId);
+  if(!p.mantenimiento) p.mantenimiento=[];
+  p.mantenimiento.push({
+    id:'m'+uid(),
+    fecha:byId('f-mant-fecha').value,
+    desc,
+    proveedor:byId('f-mant-prov').value.trim(),
+    costo:+byId('f-mant-costo').value||0,
+    estado:byId('f-mant-estado').value
+  });
+  saveDB(DB);
+  closeModalDirect();
+  renderPropiedades(propId);
+}
+
+function delMant(propId,mantId){
+  if(!confirm('¿Eliminar registro?')) return;
+  const p=getProp(propId);
+  p.mantenimiento=(p.mantenimiento||[]).filter(m=>m.id!==mantId);
+  saveDB(DB);
+  renderPropiedades(propId);
+}
+
+// ── LIQUIDACIÓN POR PROPIEDAD ─────────────────────────────────────────
+function modalLiquidacionProp(propId){
+  const p=getProp(propId);
+  const ow=getOwner(p.propId);
+  const ct=propContracts(propId)[0];
+  const periodo=today().slice(0,7);
+  const cobrado=DB.cobros.filter(cb=>ct&&cb.contId===ct.id&&cb.estado==='pagado')
+    .reduce((s,cb)=>s+cb.monto,0);
+  const mant=p.mantenimiento||[];
+  const mantCosto=mant.reduce((s,m)=>s+m.costo,0);
+  const comPct=ow.com||10;
+  const comMonto=Math.round(cobrado*(comPct/100));
+  const neto=cobrado-comMonto-mantCosto;
+  openModal(`Liquidación — ${p.dir}`,`
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Propietario: <strong style="color:var(--text)">${ow.nom||'-'}</strong> · Comisión: ${comPct}%</div>
+    <div style="background:var(--tbl-header);border:1px solid var(--brd);border-radius:var(--rad);padding:14px;margin-bottom:16px;">
+      <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span style="color:var(--muted);font-size:13px">Alquileres cobrados</span><strong>${fmt(cobrado)}</strong></div>
+      <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span style="color:var(--muted);font-size:13px">Comisión (${comPct}%)</span><span style="color:var(--danger)">− ${fmt(comMonto)}</span></div>
+      <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)">
+        <span style="color:var(--muted);font-size:13px">Mantenimiento (${mant.length} registro${mant.length!==1?'s':''})</span>
+        <span style="color:var(--danger)">− ${fmt(mantCosto)}</span>
+      </div>
+      <div class="flex justify-between" style="padding:10px 0"><strong style="font-family:'Playfair Display',serif">Neto a transferir</strong><strong style="font-family:'Playfair Display',serif;font-size:18px;color:var(--success)">${fmt(neto)}</strong></div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">CBU: ${ow.cbu||'-'}</div>
+    <div class="flex gap-2 mt-1">
+      <button class="btn btn-ghost btn-sm" onclick="printLiqProp('${propId}',${cobrado},${comMonto},${mantCosto},${neto})">Imprimir</button>
+      <button class="btn btn-ghost" onclick="closeModalDirect()">Cerrar</button>
+    </div>`);
+}
+
+function printLiqProp(propId,cobrado,com,mant,neto){
+  const p=getProp(propId); const ow=getOwner(p.propId);
+  const comPct=ow.com||10;
+  const z=byId('print-zone');
+  z.innerHTML=`<div style="padding:40px;font-family:'Source Sans 3',sans-serif;color:#000">
+    <div style="display:flex;justify-content:space-between;margin-bottom:24px">
+      <div><h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:400">Aura Prop</h1><p style="color:#666;font-size:12px;text-transform:uppercase;letter-spacing:0.04em">Liquidación de propietario</p></div>
+      <div style="text-align:right"><h2 style="font-family:'Playfair Display',serif;font-weight:400">LIQUIDACIÓN</h2><p>${today().slice(0,7)} · ${fmtDate(today())}</p></div>
+    </div><hr style="margin:0 0 20px;border-color:#E2DDD6">
+    <div><strong>Propietario:</strong> ${ow.nom}<br><strong>Propiedad:</strong> ${p.dir}<br><strong>CBU:</strong> ${ow.cbu||'-'}</div>
+    <table style="width:100%;border-collapse:collapse;margin:20px 0">
+      <tr style="background:#F0EDE6"><th style="text-align:left;padding:8px;border:1px solid #E2DDD6">Concepto</th><th style="text-align:right;padding:8px;border:1px solid #E2DDD6">Monto</th></tr>
+      <tr><td style="padding:8px;border:1px solid #E2DDD6">Alquileres cobrados</td><td style="text-align:right;padding:8px;border:1px solid #E2DDD6">${fmt(cobrado)}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #E2DDD6">Comisión administración (${comPct}%)</td><td style="text-align:right;padding:8px;border:1px solid #E2DDD6">− ${fmt(com)}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #E2DDD6">Gastos de mantenimiento</td><td style="text-align:right;padding:8px;border:1px solid #E2DDD6">− ${fmt(mant)}</td></tr>
+      <tr style="font-weight:bold"><td style="padding:8px;border:1px solid #E2DDD6">NETO A TRANSFERIR</td><td style="text-align:right;padding:8px;border:1px solid #E2DDD6">${fmt(neto)}</td></tr>
+    </table>
+    <hr style="margin:20px 0;border-color:#E2DDD6">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:center">
+      <div><div style="border-top:1px solid #000;padding-top:8px;margin-top:40px">Firma propietario</div></div>
+      <div><div style="border-top:1px solid #000;padding-top:8px;margin-top:40px">Firma administración</div></div>
+    </div>
+  </div>`;
+  window.print();
 }
 
 // ── RENDER MAP ─────────────────────────────────────────────────────────
