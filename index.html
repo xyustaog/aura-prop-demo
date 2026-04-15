@@ -371,6 +371,51 @@ tr:hover .row-actions{opacity:1}
 .search-empty{padding:24px;text-align:center;color:var(--muted);font-size:13px}
 #search-hint{padding:8px 16px;border-top:1px solid var(--brd);display:flex;gap:16px;font-size:11px;color:var(--muted)}
 #search-hint kbd{background:var(--tbl-header);border:1px solid var(--brd);border-radius:3px;padding:1px 5px;font-family:var(--font-mono);font-size:10px}
+
+/* ── Fotos de propiedades ─────────────────────────────────────────── */
+.photo-thumb{width:40px;height:40px;border-radius:4px;object-fit:cover;border:1px solid var(--brd);flex-shrink:0}
+.photo-placeholder{width:40px;height:40px;border-radius:4px;background:var(--tbl-header);border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.photo-slider{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:thin}
+.photo-slider img{height:160px;border-radius:8px;object-fit:cover;flex-shrink:0;cursor:pointer;transition:opacity .15s}
+.photo-slider img:hover{opacity:0.85}
+.photo-cover{width:100%;max-height:240px;object-fit:cover;border-radius:8px;margin-bottom:12px}
+
+/* ── Agenda ───────────────────────────────────────────────────────── */
+.agenda-week{display:grid;grid-template-columns:50px repeat(7,1fr);border:1px solid var(--brd);border-radius:8px;overflow:hidden;font-size:11px}
+.agenda-corner{background:var(--tbl-header);border-right:1px solid var(--brd);border-bottom:1px solid var(--brd)}
+.agenda-day-hd{background:var(--tbl-header);text-align:center;padding:8px 4px;border-right:1px solid var(--brd);border-bottom:1px solid var(--brd);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted)}
+.agenda-day-hd.today{color:var(--gold-500);background:var(--gold-100)}
+.agenda-time{background:var(--tbl-header);border-right:1px solid var(--brd);border-bottom:1px solid var(--brd);padding:4px 6px;text-align:right;color:var(--muted);font-size:10px;font-family:var(--font-mono)}
+.agenda-slot{border-right:1px solid var(--brd);border-bottom:1px solid var(--brd);min-height:28px;position:relative;padding:2px}
+.agenda-slot:last-child{border-right:none}
+.agenda-evt{border-radius:3px;padding:2px 5px;font-size:10px;font-weight:600;cursor:pointer;margin-bottom:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.evt-visita{background:#DBEAFE;color:#1D4ED8}
+.evt-firma{background:var(--success-light);color:var(--success)}
+.evt-vencimiento{background:var(--danger-light);color:var(--danger)}
+.evt-mantenimiento{background:#FEF3C7;color:#B45309}
+
+/* ── Bell / Alertas dropdown ──────────────────────────────────────── */
+.bell-btn{position:relative;background:none;border:1px solid var(--brd);border-radius:6px;padding:6px 8px;cursor:pointer;display:flex;align-items:center;color:var(--muted);transition:color .15s,border-color .15s}
+.bell-btn:hover{color:var(--text);border-color:var(--gold-500)}
+.bell-dot{position:absolute;top:4px;right:4px;width:7px;height:7px;background:#f43f5e;border-radius:50%;border:1.5px solid var(--surf)}
+.alerts-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:320px;background:var(--surf);border:1px solid var(--brd);border-radius:10px;box-shadow:var(--shadow-lg);z-index:300;overflow:hidden}
+.alerts-dd-hd{padding:12px 16px;border-bottom:1px solid var(--brd);font-weight:600;font-size:13px;display:flex;justify-content:space-between;align-items:center}
+.alert-item{display:flex;gap:10px;align-items:flex-start;padding:10px 16px;border-bottom:1px solid var(--brd);cursor:pointer;transition:background .1s}
+.alert-item:hover{background:var(--gold-100)}
+.alert-item:last-child{border-bottom:none}
+.alert-item-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.alert-item-icon.red{background:var(--danger-light);color:var(--danger)}
+.alert-item-icon.yel{background:var(--warning-light);color:var(--warning)}
+.alert-item-icon.grn{background:var(--success-light);color:var(--success)}
+.alert-item-body{flex:1}
+.alert-item-msg{font-size:12px;color:var(--text);line-height:1.4}
+.alert-item-date{font-size:10px;color:var(--muted);margin-top:2px}
+.alert-item-goto{font-size:10px;font-weight:600;color:var(--gold-600);text-decoration:none;letter-spacing:0.04em;text-transform:uppercase}
+
+/* ── Multi-moneda ─────────────────────────────────────────────────── */
+.currency-toggle{display:flex;border:1px solid var(--brd);border-radius:4px;overflow:hidden}
+.currency-toggle button{padding:5px 10px;font-size:11px;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);font-family:'Source Sans 3',sans-serif}
+.currency-toggle button.active{background:var(--primary);color:#fff}
 </style>
 </head>
 <body>
@@ -399,6 +444,15 @@ tr:hover .row-actions{opacity:1}
   <div id="page-inquilinos" class="page"></div>
   <div id="page-propietarios" class="page"></div>
   <div id="page-reportes" class="page"></div>
+  <div id="page-agenda" class="page"></div>
+</div>
+<!-- Bell alerts dropdown container -->
+<div id="bell-container" style="position:fixed;top:16px;right:16px;z-index:150;display:none">
+  <button type="button" class="bell-btn" id="bell-btn" onclick="toggleAlertsDropdown()" aria-label="Alertas">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    <span class="bell-dot" id="bell-dot" style="display:none"></span>
+  </button>
+  <div class="alerts-dropdown" id="alerts-dropdown" style="display:none"></div>
 </div>
 
 <!-- MODAL -->
@@ -482,15 +536,20 @@ function loadDB(){
 }
 function saveDB(d){ localStorage.setItem(K,JSON.stringify(d)); }
 let DB = loadDB() || JSON.parse(JSON.stringify(SEED));
+// Migrate: ensure new fields exist
+if(!DB.eventos) DB.eventos=[];
+if(!DB.config) DB.config={cotizacionUSD:1200};
+if(!DB.leads) DB.leads=[];
 
 // ── NAV ──────────────────────────────────────────────────────────────
 const PAGES = [
-  {id:'dashboard',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',label:'Dashboard'},
+  {id:'dashboard',  icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',label:'Dashboard'},
   {id:'propiedades',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',label:'Propiedades'},
-  {id:'contratos',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',label:'Contratos'},
-  {id:'inquilinos',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',label:'Inquilinos'},
+  {id:'agenda',     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',label:'Agenda'},
+  {id:'contratos',  icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',label:'Contratos'},
+  {id:'inquilinos', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',label:'Inquilinos'},
   {id:'propietarios',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>',label:'Propietarios'},
-  {id:'reportes',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',label:'Reportes'}
+  {id:'reportes',   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',label:'Reportes'}
 ];
 let curPage='dashboard';
 
@@ -498,9 +557,15 @@ function buildNav(){
   const dn=document.getElementById('desk-nav');
   const mn=document.getElementById('mob-nav');
   dn.innerHTML=PAGES.map(p=>`<a href="#" data-page="${p.id}" onclick="nav('${p.id}');return false">${p.icon}${p.label}</a>`).join('');
-  mn.innerHTML=PAGES.map(p=>`<li><a href="#" data-page="${p.id}" onclick="nav('${p.id}');return false">${p.icon}<span>${p.label}</span></a></li>`).join('');
+  // Mobile: show first 5 + more
+  const mobPages=PAGES.slice(0,5);
+  mn.innerHTML=mobPages.map(p=>`<li><a href="#" data-page="${p.id}" onclick="nav('${p.id}');return false">${p.icon}<span>${p.label}</span></a></li>`).join('');
+  // Show bell on desktop
+  const bellC=document.getElementById('bell-container');
+  if(bellC) bellC.style.display='block';
   setNavActive();
   renderNotifBadge();
+  updateBell();
 }
 function setNavActive(){
   document.querySelectorAll('[data-page]').forEach(a=>a.classList.toggle('active',a.dataset.page===curPage));
@@ -729,8 +794,11 @@ function renderPropiedades(detailId){
   if(detailId){ renderPropDetail(el,detailId); return; }
   const rows=DB.props.map(p=>{
     const ow=getOwner(p.propId);
+    const thumb=p.photos&&p.photos[0]
+      ?`<img src="${p.photos[0]}" class="photo-thumb" alt="">`
+      :`<div class="photo-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--muted)"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>`;
     return `<tr onclick="renderPropiedades('${p.id}')" style="cursor:pointer">
-      <td><strong>${p.dir}</strong></td>
+      <td style="display:flex;align-items:center;gap:10px;height:40px">${thumb}<strong>${p.dir}</strong></td>
       <td><span class="badge b-muted">${p.tipo}</span></td>
       <td class="num">${p.m2} m²</td>
       <td class="num">${fmt(p.precio)}</td>
@@ -764,14 +832,26 @@ function renderPropDetail(el,id){
   const ct=propContracts(id)[0];
   const inq=ct?getInq(ct.inqId):null;
   const cobrosH=DB.cobros.filter(cb=>ct&&cb.contId===ct.id).sort((a,b)=>b.periodo.localeCompare(a.periodo)).slice(0,5);
+
+  // Photos section
+  let photosHtml='';
+  if(p.photos&&p.photos.length){
+    if(p.photos.length===1){
+      photosHtml=`<img src="${p.photos[0]}" class="photo-cover" onclick="openPhotoModal('${id}',0)" alt="Foto propiedad">`;
+    } else {
+      photosHtml=`<div class="photo-slider">${p.photos.map((ph,i)=>`<img src="${ph}" onclick="openPhotoModal('${id}',${i})" alt="Foto ${i+1}">`).join('')}</div>`;
+    }
+  }
+
   el.innerHTML=`
   <div class="detail-back" onclick="renderPropiedades()">← Volver a Propiedades</div>
+  ${photosHtml}
   <div class="flex justify-between flex-wrap gap-2" style="margin-bottom:20px">
     <div><h2>${p.dir}</h2><div class="text-muted text-sm" style="margin-top:4px;">${p.tipo} · ${p.m2} m²</div></div>
     <div class="flex gap-2" style="flex-wrap:wrap;">
       ${stateBadge(p.estado)}
-      <button class="btn btn-ghost btn-sm" onclick="editProp('${id}')">Editar</button>
-      <button class="btn btn-teal btn-sm" onclick="modalLiquidacionProp('${id}')">💰 Liquidación</button>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="editProp('${id}')">Editar</button>
+      <button type="button" class="btn btn-teal btn-sm" onclick="modalLiquidacionProp('${id}')">Liquidación</button>
     </div>
   </div>
   <div class="info-grid">
@@ -808,6 +888,7 @@ function renderPropDetail(el,id){
 
 function propForm(p={}){
   const owOpts=DB.owners.map(o=>`<option value="${o.id}"${p.propId===o.id?' selected':''}>${o.nom}</option>`).join('');
+  const existingPhotos=(p.photos||[]).slice(0,4).map((ph,i)=>`<img src="${ph}" style="height:48px;width:60px;object-fit:cover;border-radius:4px;border:1px solid var(--brd)">`).join('');
   return `<div class="form-grid">
     <div class="form-group full"><label>Dirección</label><input id="f-dir" value="${p.dir||''}" required></div>
     <div class="form-group"><label>Tipo</label><select id="f-tipo">${['Dpto','Casa','Local','Oficina','Cochera'].map(t=>`<option${p.tipo===t?' selected':''}>${t}</option>`).join('')}</select></div>
@@ -817,17 +898,45 @@ function propForm(p={}){
     <div class="form-group"><label>Propietario</label><select id="f-propId"><option value="">Sin asignar</option>${owOpts}</select></div>
     <div class="form-group"><label>Estado</label><select id="f-estado">${['Disponible','Alquilada','Refacción'].map(s=>`<option${p.estado===s?' selected':''}>${s}</option>`).join('')}</select></div>
     <div class="form-group full"><label>Notas</label><input id="f-notas" value="${p.notas||''}"></div>
+    <div class="form-group full">
+      <label>Fotos de la propiedad</label>
+      ${existingPhotos?`<div class="flex gap-2 flex-wrap" style="margin-bottom:8px">${existingPhotos}</div>`:''}
+      <input id="f-photos" type="file" multiple accept="image/*" onchange="previewPhotos(this,'${p.id||''}')" style="font-size:12px;padding:6px">
+      <div id="photo-preview-row" class="flex gap-2 flex-wrap" style="margin-top:6px"></div>
+    </div>
   </div>
   <div class="flex gap-2 mt-2">
-    <button class="btn btn-pri" onclick="saveProp('${p.id||''}')">Guardar</button>
-    <button class="btn btn-ghost" onclick="closeModalDirect()">Cancelar</button>
+    <button type="button" class="btn btn-pri" onclick="saveProp('${p.id||''}')">Guardar</button>
+    <button type="button" class="btn btn-ghost" onclick="closeModalDirect()">Cancelar</button>
   </div>`;
+}
+function previewPhotos(input,propId){
+  const row=byId('photo-preview-row');
+  row.innerHTML='<span class="text-muted text-sm">Procesando...</span>';
+  const files=Array.from(input.files);
+  Promise.all(files.map(f=>new Promise(res=>{
+    const r=new FileReader();
+    r.onload=e=>res(e.target.result);
+    r.readAsDataURL(f);
+  }))).then(dataURLs=>{
+    window._pendingPhotos=dataURLs;
+    row.innerHTML=dataURLs.map(d=>`<img src="${d}" style="height:48px;width:60px;object-fit:cover;border-radius:4px;border:1px solid var(--brd)">`).join('');
+  });
 }
 function newProp(){ openModal('Nueva propiedad',propForm()); }
 function editProp(id){ openModal('Editar propiedad',propForm(getProp(id))); }
 function saveProp(id){
   const d={dir:byId('f-dir').value,tipo:byId('f-tipo').value,m2:+byId('f-m2').value,precio:+byId('f-precio').value,exp:+byId('f-exp').value||0,propId:byId('f-propId').value,estado:byId('f-estado').value,notas:byId('f-notas').value};
   if(!d.dir) return alert('Ingresá la dirección');
+  if(window._pendingPhotos&&window._pendingPhotos.length){
+    if(id){
+      const existing=getProp(id);
+      d.photos=[...(existing.photos||[]),...window._pendingPhotos].slice(0,10);
+    } else {
+      d.photos=window._pendingPhotos.slice(0,10);
+    }
+    window._pendingPhotos=null;
+  }
   if(id){ Object.assign(getProp(id),d); }
   else { DB.props.push({...d,id:'p'+uid()}); }
   saveDB(DB); closeModalDirect(); renderPropiedades();
@@ -849,14 +958,15 @@ function renderContratos(detailId){
     let warn='';
     if(dias<=90&&dias>=0) warn=`<span class="badge b-yel" style="margin-left:4px">${dias}d</span>`;
     if(dias<0) warn=`<span class="badge b-red" style="margin-left:4px">Vencido</span>`;
+    const monedaTag=c.moneda==='USD'?`<span class="badge-v2 bv-navy" style="margin-left:4px;font-size:9px">USD</span>`:'';
     return `<tr onclick="renderContratos('${c.id}')" style="cursor:pointer">
       <td><div>${p.dir||'-'}</div><div class="text-muted text-sm">${inq.nom||'-'}</div></td>
       <td>${fmtDate(c.inicio)}</td><td>${fmtDate(fin)}${warn}</td>
-      <td>${fmt(c.actMonto)}</td>
+      <td class="num">${c.moneda==='USD'?'USD '+c.actMonto.toLocaleString('es-AR'):fmt(c.actMonto)}${monedaTag}</td>
       <td><span class="badge b-pri">${c.tipo}</span> <span class="text-muted text-sm">${c.freq}</span></td>
       <td>${stateBadge(c.estado)}</td>
-      <td class="no-print">
-        <button class="btn btn-teal btn-sm" onclick="event.stopPropagation();modalUpdate('${c.id}')">Actualizar</button>
+      <td class="no-print row-actions">
+        <button type="button" class="btn btn-teal btn-sm" onclick="event.stopPropagation();modalUpdate('${c.id}')">Actualizar</button>
       </td>
     </tr>`;
   }).join('');
@@ -914,26 +1024,44 @@ function renderContDetail(el,id){
 function contratoForm(c={}){
   const propOpts=DB.props.map(p=>`<option value="${p.id}"${c.propId===p.id?' selected':''}>${p.dir}</option>`).join('');
   const inqOpts=DB.inqs.map(i=>`<option value="${i.id}"${c.inqId===i.id?' selected':''}>${i.nom}</option>`).join('');
+  const moneda=c.moneda||'ARS';
   return `<div class="form-grid">
     <div class="form-group full"><label>Propiedad</label><select id="f-propId">${propOpts}</select></div>
     <div class="form-group full"><label>Inquilino</label><select id="f-inqId">${inqOpts}</select></div>
     <div class="form-group"><label>Fecha inicio</label><input id="f-inicio" type="date" value="${c.inicio||today()}"></div>
     <div class="form-group"><label>Duración</label><select id="f-dur"><option value="24"${c.dur===24?' selected':''}>24 meses</option><option value="36"${c.dur===36?' selected':''}>36 meses</option></select></div>
-    <div class="form-group"><label>Monto inicial (ARS)</label><input id="f-monto" type="number" value="${c.monto||''}"></div>
-    <div class="form-group"><label>Depósito (ARS)</label><input id="f-dep" type="number" value="${c.dep||''}"></div>
+    <div class="form-group">
+      <label>Monto inicial</label>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input id="f-monto" type="number" value="${c.monto||''}" style="flex:1">
+        <div class="currency-toggle">
+          <button type="button" id="btn-ars" class="${moneda==='ARS'?'active':''}" onclick="setCurrency('ARS')">ARS</button>
+          <button type="button" id="btn-usd" class="${moneda==='USD'?'active':''}" onclick="setCurrency('USD')">USD</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group"><label>Depósito</label><input id="f-dep" type="number" value="${c.dep||''}"></div>
     <div class="form-group"><label>Tipo actualización</label><select id="f-tipo"><option${c.tipo==='ICL'?' selected':''}>ICL</option><option${c.tipo==='IPC'?' selected':''}>IPC</option><option${c.tipo==='Libre%'?' selected':''}>Libre%</option></select></div>
     <div class="form-group"><label>Frecuencia</label><select id="f-freq"><option${c.freq==='trimestral'?' selected':''}>trimestral</option><option${c.freq==='cuatrimestral'?' selected':''}>cuatrimestral</option><option${c.freq==='semestral'?' selected':''}>semestral</option></select></div>
     <div class="form-group full"><label>Garantía</label><select id="f-gar"><option${c.gar==='propietario garante'?' selected':''}>propietario garante</option><option${c.gar==='seguro de caución'?' selected':''}>seguro de caución</option><option${c.gar==='recibo de sueldo'?' selected':''}>recibo de sueldo</option></select></div>
   </div>
+  <input type="hidden" id="f-moneda" value="${moneda}">
   <div class="flex gap-2 mt-2">
-    <button class="btn btn-pri" onclick="saveContrato('${c.id||''}')">Guardar</button>
-    <button class="btn btn-ghost" onclick="closeModalDirect()">Cancelar</button>
+    <button type="button" class="btn btn-pri" onclick="saveContrato('${c.id||''}')">Guardar</button>
+    <button type="button" class="btn btn-ghost" onclick="closeModalDirect()">Cancelar</button>
   </div>`;
+}
+function setCurrency(cur){
+  byId('f-moneda').value=cur;
+  const btnArs=byId('btn-ars'); const btnUsd=byId('btn-usd');
+  if(btnArs){btnArs.classList.toggle('active',cur==='ARS');btnUsd.classList.toggle('active',cur==='USD');}
 }
 function newContrato(){ openModal('Nuevo contrato',contratoForm()); }
 function saveContrato(id){
   const monto=+byId('f-monto').value;
-  const d={propId:byId('f-propId').value,inqId:byId('f-inqId').value,inicio:byId('f-inicio').value,dur:+byId('f-dur').value,monto,actMonto:monto,dep:+byId('f-dep').value,tipo:byId('f-tipo').value,freq:byId('f-freq').value,gar:byId('f-gar').value,estado:'activo',updates:[]};
+  const monedaEl=byId('f-moneda');
+  const moneda=monedaEl?monedaEl.value:'ARS';
+  const d={propId:byId('f-propId').value,inqId:byId('f-inqId').value,inicio:byId('f-inicio').value,dur:+byId('f-dur').value,monto,actMonto:monto,dep:+byId('f-dep').value,tipo:byId('f-tipo').value,freq:byId('f-freq').value,gar:byId('f-gar').value,estado:'activo',updates:[],moneda};
   if(!d.monto) return alert('Ingresá el monto');
   if(id){ const c=getContract(id); Object.assign(c,{...d,updates:c.updates}); }
   else { DB.contracts.push({...d,id:'c'+uid()}); }
@@ -1810,6 +1938,235 @@ function printLiqProp(propId,cobrado,com,mant,neto){
   window.print();
 }
 
+// ── LIGHTBOX FOTOS ───────────────────────────────────────────────────
+function openPhotoModal(propId,idx){
+  const p=getProp(propId);
+  const photos=p.photos||[];
+  if(!photos.length) return;
+  let cur=idx;
+  function showPhoto(){
+    byId('modal-title').textContent=`${p.dir} — Foto ${cur+1} de ${photos.length}`;
+    byId('modal-body').innerHTML=`
+      <img src="${photos[cur]}" style="width:100%;border-radius:8px;max-height:70vh;object-fit:contain">
+      ${photos.length>1?`<div class="flex justify-between mt-2">
+        <button type="button" class="btn btn-ghost" onclick="(function(){${cur>0?`cur=${cur-1};`:''}showPhoto&&showPhoto()})()">← Anterior</button>
+        <button type="button" class="btn btn-ghost" onclick="(function(){${cur<photos.length-1?`cur=${cur+1};`:''}showPhoto&&showPhoto()})()">Siguiente →</button>
+      </div>`:''}`
+  }
+  openModal(p.dir,`<img src="${photos[cur]}" style="width:100%;border-radius:8px;max-height:65vh;object-fit:contain">
+    ${photos.length>1?`<div class="flex justify-between mt-2"><button type="button" class="btn btn-ghost btn-sm" onclick="photoNav('${propId}',${idx},-1)">← Anterior</button><button type="button" class="btn btn-ghost btn-sm" onclick="photoNav('${propId}',${idx},1)">Siguiente →</button></div>`:''}`);
+}
+function photoNav(propId,baseIdx,dir){
+  const p=getProp(propId);
+  const photos=p.photos||[];
+  const newIdx=Math.max(0,Math.min(photos.length-1,baseIdx+dir));
+  byId('modal-title').textContent=`${p.dir} — Foto ${newIdx+1} de ${photos.length}`;
+  byId('modal-body').innerHTML=`<img src="${photos[newIdx]}" style="width:100%;border-radius:8px;max-height:65vh;object-fit:contain">
+    <div class="flex justify-between mt-2">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="photoNav('${propId}',${newIdx},-1)">← Anterior</button>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="photoNav('${propId}',${newIdx},1)">Siguiente →</button>
+    </div>`;
+}
+
+// ── MÓDULO AGENDA ─────────────────────────────────────────────────────
+if(!DB.eventos) DB.eventos=[];
+
+const AGENDA_TIPOS=[
+  {id:'visita',label:'Visita',cls:'evt-visita'},
+  {id:'firma',label:'Firma',cls:'evt-firma'},
+  {id:'vencimiento',label:'Vencimiento',cls:'evt-vencimiento'},
+  {id:'mantenimiento',label:'Mantenimiento',cls:'evt-mantenimiento'}
+];
+
+function renderAgenda(){
+  const el=byId('page-agenda');
+  // Get current week
+  const now=new Date();
+  const dow=now.getDay()===0?6:now.getDay()-1; // Mon=0
+  const weekStart=new Date(now); weekStart.setDate(now.getDate()-dow); weekStart.setHours(0,0,0,0);
+  const days=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const hours=[];
+  for(let h=8;h<=20;h++) hours.push(h);
+
+  // Auto-generate contract expiry events
+  const autoEvts=[];
+  DB.contracts.filter(c=>c.estado==='activo').forEach(c=>{
+    const fin=contractEnd(c);
+    const d30=new Date(fin+'T00:00:00'); d30.setDate(d30.getDate()-30);
+    autoEvts.push({id:'auto-fin-'+c.id,tipo:'vencimiento',titulo:`Vence: ${getProp(c.propId).dir||''}`,fecha:fin,hora:'09:00',propId:c.propId,auto:true});
+    autoEvts.push({id:'auto-alerta-'+c.id,tipo:'vencimiento',titulo:`Alerta 30d: ${getProp(c.propId).dir||''}`,fecha:d30.toISOString().slice(0,10),hora:'09:00',propId:c.propId,auto:true});
+  });
+  const allEvts=[...DB.eventos,...autoEvts];
+
+  // Build week grid
+  const dayDates=days.map((_,i)=>{const d=new Date(weekStart);d.setDate(d.getDate()+i);return d;});
+  const todayStr=today();
+
+  const headerCells=dayDates.map((d,i)=>{
+    const ds=d.toISOString().slice(0,10);
+    const isToday=ds===todayStr;
+    return `<div class="agenda-day-hd${isToday?' today':''}">${days[i]}<br><span style="font-size:13px;font-weight:400">${d.getDate()}</span></div>`;
+  }).join('');
+
+  const rows=hours.map(h=>{
+    const cells=dayDates.map(d=>{
+      const ds=d.toISOString().slice(0,10);
+      const slotEvts=allEvts.filter(e=>e.fecha===ds&&parseInt(e.hora)===h);
+      return `<div class="agenda-slot">${slotEvts.map(e=>{
+        const tc=AGENDA_TIPOS.find(t=>t.id===e.tipo)||AGENDA_TIPOS[0];
+        return `<div class="agenda-evt ${tc.cls}" title="${e.titulo}${e.propId?' | '+getProp(e.propId).dir:''}">${e.titulo}</div>`;
+      }).join('')}</div>`;
+    }).join('');
+    return `<div class="agenda-time">${h}:00</div>${cells}`;
+  }).join('');
+
+  const weekLabel=`${dayDates[0].getDate()}/${dayDates[0].getMonth()+1} – ${dayDates[6].getDate()}/${dayDates[6].getMonth()+1}`;
+
+  el.innerHTML=`
+  <div class="pg-hd">
+    <h2>Agenda</h2>
+    <div class="flex gap-2 items-center">
+      <span class="text-muted text-sm">${weekLabel}</span>
+      <button type="button" class="btn btn-pri btn-sm" onclick="newEvento()">+ Nuevo evento</button>
+    </div>
+  </div>
+  <div style="overflow-x:auto">
+    <div class="agenda-week" style="min-width:700px">
+      <div class="agenda-corner"></div>
+      ${headerCells}
+      ${rows}
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="section-heading-accent">Próximos eventos</div>
+    ${allEvts.filter(e=>e.fecha>=todayStr).sort((a,b)=>a.fecha.localeCompare(b.fecha)).slice(0,8).map(e=>{
+      const tc=AGENDA_TIPOS.find(t=>t.id===e.tipo)||AGENDA_TIPOS[0];
+      return `<div class="flex items-center gap-2" style="padding:8px 0;border-bottom:1px solid var(--brd)">
+        <span class="agenda-evt ${tc.cls}" style="min-width:80px;text-align:center">${tc.label}</span>
+        <div><div style="font-size:13px;font-weight:500">${e.titulo}</div><div class="text-muted text-sm">${fmtDate(e.fecha)} ${e.hora?'· '+e.hora:''}</div></div>
+        ${!e.auto?`<button type="button" class="btn btn-red btn-sm" style="margin-left:auto" onclick="delEvento('${e.id}')">✕</button>`:'<span style="margin-left:auto;font-size:10px;color:var(--muted)">auto</span>'}
+      </div>`;
+    }).join('')||'<p class="text-muted text-sm" style="padding:8px 0">Sin eventos próximos</p>'}
+  </div>`;
+}
+
+function newEvento(){
+  const propOpts=DB.props.map(p=>`<option value="${p.id}">${p.dir}</option>`).join('');
+  const inqOpts=DB.inqs.map(i=>`<option value="${i.id}">${i.nom}</option>`).join('');
+  openModal('Nuevo evento',`
+    <div class="form-grid">
+      <div class="form-group"><label>Tipo</label><select id="f-evt-tipo">${AGENDA_TIPOS.map(t=>`<option value="${t.id}">${t.label}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Fecha</label><input id="f-evt-fecha" type="date" value="${today()}"></div>
+      <div class="form-group"><label>Hora</label><input id="f-evt-hora" type="time" value="10:00"></div>
+      <div class="form-group"><label>Duración (min)</label><input id="f-evt-dur" type="number" value="60" min="15"></div>
+      <div class="form-group full"><label>Título / Descripción</label><input id="f-evt-titulo" placeholder="Ej: Visita de Martín Flores"></div>
+      <div class="form-group"><label>Propiedad (opcional)</label><select id="f-evt-prop"><option value="">Sin asignar</option>${propOpts}</select></div>
+      <div class="form-group"><label>Inquilino/Cliente</label><select id="f-evt-inq"><option value="">Sin asignar</option>${inqOpts}</select></div>
+      <div class="form-group full"><label>Notas</label><input id="f-evt-notas" placeholder="Notas adicionales"></div>
+    </div>
+    <div class="flex gap-2 mt-2">
+      <button type="button" class="btn btn-pri" onclick="saveEvento()">Guardar</button>
+      <button type="button" class="btn btn-ghost" onclick="closeModalDirect()">Cancelar</button>
+    </div>`);
+}
+
+function saveEvento(){
+  const titulo=byId('f-evt-titulo').value.trim();
+  if(!titulo) return alert('Ingresá un título');
+  DB.eventos.push({
+    id:'ev'+uid(),
+    tipo:byId('f-evt-tipo').value,
+    titulo,
+    fecha:byId('f-evt-fecha').value,
+    hora:byId('f-evt-hora').value,
+    dur:+byId('f-evt-dur').value||60,
+    propId:byId('f-evt-prop').value,
+    inqId:byId('f-evt-inq').value,
+    notas:byId('f-evt-notas').value
+  });
+  saveDB(DB); closeModalDirect(); renderAgenda();
+}
+
+function delEvento(id){
+  DB.eventos=DB.eventos.filter(e=>e.id!==id);
+  saveDB(DB); renderAgenda();
+}
+
+// ── CENTRO DE ALERTAS (BELL) ──────────────────────────────────────────
+function generarAlertas(){
+  const alerts=[];
+  const t=today();
+  DB.contracts.filter(c=>c.estado==='activo').forEach(c=>{
+    const days=daysToEnd(c); const p=getProp(c.propId);
+    if(days<0) alerts.push({tipo:'vencido',msg:`Contrato vencido: ${p.dir}`,fecha:contractEnd(c),action:()=>nav('contratos')});
+    else if(days<=30) alerts.push({tipo:'proximo',msg:`Contrato vence en ${days} días: ${p.dir}`,fecha:contractEnd(c),action:()=>nav('contratos')});
+    else if(days<=90) alerts.push({tipo:'aviso',msg:`Contrato vence en ${days} días: ${p.dir}`,fecha:contractEnd(c),action:()=>nav('contratos')});
+  });
+  DB.cobros.filter(c=>c.estado==='vencido').forEach(cb=>{
+    const inq=getInq(cb.inqId);
+    alerts.push({tipo:'cobro',msg:`Cobro vencido: ${inq.nom} — ${cb.periodo}`,fecha:cb.periodo+'-01',action:()=>nav('inquilinos')});
+  });
+  DB.cobros.filter(c=>c.estado==='pendiente').forEach(cb=>{
+    const inq=getInq(cb.inqId);
+    alerts.push({tipo:'pendiente',msg:`Cobro pendiente: ${inq.nom} — ${fmt(cb.monto)}`,fecha:cb.periodo+'-01',action:()=>nav('inquilinos')});
+  });
+  DB.eventos.filter(e=>e.fecha>=t&&e.fecha<=addMonths(t,0).replace(/\d{2}$/,String(new Date(t.slice(0,7)+'-'+t.slice(8,10)).getDate()+3).padStart(2,'0'))).forEach(e=>{
+    alerts.push({tipo:'evento',msg:`Evento próximo: ${e.titulo}`,fecha:e.fecha,action:()=>nav('agenda')});
+  });
+  return alerts.slice(0,10);
+}
+
+function updateBell(){
+  const alerts=generarAlertas();
+  const dot=byId('bell-dot');
+  if(dot) dot.style.display=alerts.length?'block':'none';
+}
+
+let bellOpen=false;
+function toggleAlertsDropdown(){
+  bellOpen=!bellOpen;
+  const dd=byId('alerts-dropdown');
+  if(!dd) return;
+  if(bellOpen){
+    const alerts=generarAlertas();
+    const typeIcon={
+      vencido:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+      proximo:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+      cobro:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>`,
+      pendiente:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>`,
+      evento:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`
+    };
+    const typeClr={vencido:'red',proximo:'yel',cobro:'red',pendiente:'yel',aviso:'grn',evento:'grn'};
+    dd.innerHTML=`<div class="alerts-dd-hd"><span>Alertas <span style="background:var(--danger);color:#fff;border-radius:999px;padding:1px 7px;font-size:10px">${alerts.length}</span></span><button type="button" onclick="toggleAlertsDropdown()" style="background:none;border:none;cursor:pointer;color:var(--muted)">✕</button></div>
+    ${alerts.length?alerts.map((a,i)=>`<div class="alert-item" onclick="bellGoTo(${i})">
+      <div class="alert-item-icon ${typeClr[a.tipo]||'yel'}">${typeIcon[a.tipo]||typeIcon.aviso}</div>
+      <div class="alert-item-body"><div class="alert-item-msg">${a.msg}</div><div class="alert-item-date">${fmtDate(a.fecha)}</div></div>
+      <span class="alert-item-goto">Ir →</span>
+    </div>`).join(''):'<div style="padding:16px;text-align:center;color:var(--muted);font-size:13px">Sin alertas activas</div>'}`;
+    dd.style.display='block';
+    window._bellAlerts=alerts;
+    setTimeout(()=>document.addEventListener('click',closeBellOutside,{once:true}),50);
+  } else {
+    dd.style.display='none';
+  }
+}
+function bellGoTo(idx){
+  const a=window._bellAlerts&&window._bellAlerts[idx];
+  if(a&&a.action){toggleAlertsDropdown();a.action();}
+}
+function closeBellOutside(e){
+  const container=byId('bell-container');
+  if(container&&!container.contains(e.target)){bellOpen=false;const dd=byId('alerts-dropdown');if(dd)dd.style.display='none';}
+}
+
+// ── MULTI-MONEDA ──────────────────────────────────────────────────────
+if(!DB.config) DB.config={cotizacionUSD:1200};
+
+function fmtMonto(monto,moneda){
+  if(moneda==='USD') return `USD ${new Intl.NumberFormat('es-AR',{maximumFractionDigits:0}).format(monto)}`;
+  return fmt(monto);
+}
+
 // ── BÚSQUEDA GLOBAL (Ctrl+K) ──────────────────────────────────────────
 let searchIdx=-1;
 function openSearch(){
@@ -1877,6 +2234,7 @@ document.addEventListener('keydown',e=>{
 const renders = {
   dashboard: renderDashboard,
   propiedades: renderPropiedades,
+  agenda: renderAgenda,
   contratos: renderContratos,
   inquilinos: renderInquilinos,
   propietarios: renderPropietarios,
