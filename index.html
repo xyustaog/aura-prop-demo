@@ -416,6 +416,54 @@ tr:hover .row-actions{opacity:1}
 .currency-toggle{display:flex;border:1px solid var(--brd);border-radius:4px;overflow:hidden}
 .currency-toggle button{padding:5px 10px;font-size:11px;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);font-family:'Source Sans 3',sans-serif}
 .currency-toggle button.active{background:var(--primary);color:#fff}
+
+/* ── Kanban pipeline ──────────────────────────────────────────────── */
+.kanban-board{display:grid;grid-template-columns:repeat(5,minmax(200px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
+@media(max-width:900px){.kanban-board{grid-template-columns:repeat(2,1fr)}}
+.kanban-col{background:var(--bg-subtle);border:1px solid var(--brd);border-radius:8px;min-height:400px}
+.kanban-col-hd{padding:10px 14px;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center}
+.kanban-col-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)}
+.kanban-col-count{background:var(--brd);border-radius:999px;padding:1px 7px;font-size:10px;font-weight:600;color:var(--muted)}
+.kanban-body{padding:8px;min-height:350px}
+.kanban-card{background:var(--surf);border:1px solid var(--brd);border-radius:6px;padding:10px 12px;margin-bottom:8px;cursor:grab;transition:box-shadow .15s,border-color .15s;user-select:none}
+.kanban-card:hover{box-shadow:var(--shadow-md);border-color:var(--gold-500)}
+.kanban-card.dragging{opacity:0.5;box-shadow:var(--shadow-lg)}
+.kanban-col.drag-over{background:var(--gold-100);border-color:var(--gold-500)}
+.lead-name{font-weight:600;font-size:13px;color:var(--text);margin-bottom:4px}
+.lead-prop{font-size:11px;color:var(--muted);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lead-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+.lead-tag{font-size:9px;padding:1px 6px;border-radius:3px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em}
+.lead-tag.src-zonaprop{background:#E3F2FD;color:#1565C0}
+.lead-tag.src-argenprop{background:#E8F5E9;color:#2E7D32}
+.lead-tag.src-referido{background:#F3E5F5;color:#6A1B9A}
+.lead-tag.src-redes{background:#FFF3E0;color:#E65100}
+.lead-tag.src-directo{background:#ECEFF1;color:#37474F}
+.lead-avatar{width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.lead-footer{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.lead-budget{font-size:11px;font-family:var(--font-mono);color:var(--muted)}
+.lead-date{font-size:10px;color:var(--muted)}
+
+/* ── Timeline ─────────────────────────────────────────────────────── */
+.timeline{padding:0}
+.tl-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--brd);position:relative}
+.tl-item:last-child{border-bottom:none}
+.tl-dot{width:8px;height:8px;border-radius:50%;background:var(--gold-500);flex-shrink:0;margin-top:5px}
+.tl-body{flex:1}
+.tl-title{font-size:13px;font-weight:500;color:var(--text)}
+.tl-date{font-size:10px;color:var(--muted);margin-top:2px}
+.tl-note{font-size:12px;color:var(--muted);margin-top:3px;font-style:italic}
+
+/* ── Portal inquilino ─────────────────────────────────────────────── */
+.portal-view{max-width:600px;margin:0 auto;font-family:'Source Sans 3',sans-serif}
+.portal-header{background:var(--navy-800);color:#fff;padding:24px;border-radius:12px 12px 0 0;text-align:center}
+.portal-logo{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:4px}
+.portal-tenant{font-size:14px;opacity:0.8}
+.portal-body{background:var(--surf);border:1px solid var(--brd);border-radius:0 0 12px 12px;padding:24px}
+.portal-prop-card{border:1px solid var(--brd);border-radius:8px;padding:16px;margin-bottom:16px;background:var(--bg-subtle)}
+.portal-next-due{background:var(--warning-light);border:1px solid var(--warning);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+
+/* ── Gastos ───────────────────────────────────────────────────────── */
+.gastos-chart-wrap{height:180px;position:relative}
 </style>
 </head>
 <body>
@@ -445,6 +493,7 @@ tr:hover .row-actions{opacity:1}
   <div id="page-propietarios" class="page"></div>
   <div id="page-reportes" class="page"></div>
   <div id="page-agenda" class="page"></div>
+  <div id="page-oportunidades" class="page"></div>
 </div>
 <!-- Bell alerts dropdown container -->
 <div id="bell-container" style="position:fixed;top:16px;right:16px;z-index:150;display:none">
@@ -549,7 +598,8 @@ const PAGES = [
   {id:'contratos',  icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',label:'Contratos'},
   {id:'inquilinos', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',label:'Inquilinos'},
   {id:'propietarios',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>',label:'Propietarios'},
-  {id:'reportes',   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',label:'Reportes'}
+  {id:'reportes',   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',label:'Reportes'},
+  {id:'oportunidades',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',label:'Pipeline'}
 ];
 let curPage='dashboard';
 
@@ -883,6 +933,13 @@ function renderPropDetail(el,id){
       <button class="btn btn-ghost btn-sm" onclick="openMantModal('${id}')">+ Registrar</button>
     </div>
     ${renderMantList(id)}
+  </div>
+  <div class="card mt-2" id="gastos-section-${id}">
+    <div class="flex justify-between items-center" style="margin-bottom:14px;">
+      <div class="section-heading-accent" style="margin-bottom:0;">💸 Gastos de la propiedad</div>
+      <button class="btn btn-ghost btn-sm" onclick="openGastoModal('${id}')">+ Agregar gasto</button>
+    </div>
+    ${renderGastosList(id)}
   </div>`;
 }
 
@@ -1202,6 +1259,8 @@ function renderInqDetail(id){
     <div><h2>${i.nom}</h2><div class="text-muted text-sm" style="margin-top:4px;">DNI ${i.dni} · ${i.tel}</div></div>
     <div class="flex gap-2">
       <a class="btn btn-teal btn-sm" href="https://wa.me/54${i.tel.replace(/\D/g,'').replace(/^54/,'')}?text=${encodeURIComponent('Hola '+i.nom+', recordatorio de pago.')}" target="_blank">WhatsApp</a>
+      <button class="btn btn-ghost btn-sm" onclick="copiarLinkPortal('${id}')">Copiar link portal</button>
+      <button class="btn btn-ghost btn-sm" onclick="abrirPortalInquilino('${id}')">Ver portal</button>
       <button class="btn btn-ghost btn-sm" onclick="editInq('${id}')">Editar</button>
     </div>
   </div>
@@ -2167,6 +2226,306 @@ function fmtMonto(monto,moneda){
   return fmt(monto);
 }
 
+// ── MÓDULO OPORTUNIDADES (PIPELINE KANBAN) ────────────────────────────
+const ETAPAS=[
+  {id:'nuevo',label:'Nuevo lead'},
+  {id:'contactado',label:'Contactado'},
+  {id:'visita',label:'Visita agendada'},
+  {id:'propuesta',label:'Propuesta'},
+  {id:'ganado',label:'Ganado/Perdido'}
+];
+const FUENTES=['Zonaprop','Argenprop','referido','redes','directo'];
+
+function renderOportunidades(){
+  const el=byId('page-oportunidades');
+  const cols=ETAPAS.map(etapa=>{
+    const cards=(DB.leads||[]).filter(l=>l.etapa===etapa.id);
+    const cardHtml=cards.map(l=>buildLeadCard(l)).join('');
+    return `<div class="kanban-col" data-etapa="${etapa.id}"
+      ondragover="event.preventDefault();this.classList.add('drag-over')"
+      ondragleave="this.classList.remove('drag-over')"
+      ondrop="dropLead(event,'${etapa.id}')">
+      <div class="kanban-col-hd">
+        <span class="kanban-col-title">${etapa.label}</span>
+        <span class="kanban-col-count">${cards.length}</span>
+      </div>
+      <div class="kanban-body">${cardHtml||'<p style="text-align:center;padding:20px;color:var(--muted);font-size:12px">Sin leads</p>'}</div>
+    </div>`;
+  }).join('');
+  el.innerHTML=`
+  <div class="pg-hd"><h2>Pipeline de Oportunidades</h2><button type="button" class="btn btn-pri" onclick="newLead()">+ Nuevo lead</button></div>
+  <div class="kanban-board">${cols}</div>`;
+}
+
+function buildLeadCard(l){
+  const initials=(l.nom||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+  const propName=l.propId?getProp(l.propId).dir||'':'Sin propiedad';
+  const srcCls='src-'+(l.fuente||'directo').toLowerCase().replace(/\s/g,'-');
+  return `<div class="kanban-card" draggable="true"
+    ondragstart="dragLead(event,'${l.id}')"
+    ondragend="this.classList.remove('dragging')"
+    onclick="verLead('${l.id}')">
+    <div class="flex items-center gap-2" style="margin-bottom:6px">
+      <div class="lead-avatar">${initials}</div>
+      <div style="flex:1;min-width:0">
+        <div class="lead-name">${l.nom||'-'}</div>
+        <div class="lead-prop">${propName}</div>
+      </div>
+    </div>
+    <div class="lead-tags">
+      <span class="lead-tag ${srcCls}">${l.fuente||'directo'}</span>
+      ${l.presupuesto?`<span class="lead-budget">${fmt(+l.presupuesto)}</span>`:''}
+    </div>
+    <div class="lead-footer">
+      <span class="lead-date">${fmtDate(l.updated||l.created||today())}</span>
+      <span class="text-muted text-sm">${l.tel||''}</span>
+    </div>
+  </div>`;
+}
+
+let draggedLeadId=null;
+function dragLead(e,id){
+  draggedLeadId=id;
+  e.target.classList.add('dragging');
+}
+function dropLead(e,etapa){
+  e.preventDefault();
+  document.querySelectorAll('.kanban-col').forEach(c=>c.classList.remove('drag-over'));
+  if(!draggedLeadId) return;
+  const lead=(DB.leads||[]).find(l=>l.id===draggedLeadId);
+  if(lead){lead.etapa=etapa;lead.updated=today();}
+  saveDB(DB); draggedLeadId=null; renderOportunidades();
+}
+
+function newLead(){
+  const propOpts=`<option value="">Sin asignar</option>`+DB.props.map(p=>`<option value="${p.id}">${p.dir}</option>`).join('');
+  openModal('Nuevo Lead',`
+    <div class="form-grid">
+      <div class="form-group full"><label>Nombre</label><input id="f-lead-nom" placeholder="Nombre completo"></div>
+      <div class="form-group"><label>Teléfono</label><input id="f-lead-tel" placeholder="11 1234-5678"></div>
+      <div class="form-group"><label>Email</label><input id="f-lead-mail" type="email" placeholder="email@ejemplo.com"></div>
+      <div class="form-group"><label>Propiedad de interés</label><select id="f-lead-prop">${propOpts}</select></div>
+      <div class="form-group"><label>Presupuesto (ARS)</label><input id="f-lead-presup" type="number" placeholder="0"></div>
+      <div class="form-group"><label>Fuente</label><select id="f-lead-fuente">${FUENTES.map(f=>`<option>${f}</option>`).join('')}</select></div>
+      <div class="form-group full"><label>Notas</label><textarea id="f-lead-notas" rows="2" style="resize:vertical"></textarea></div>
+    </div>
+    <div class="flex gap-2 mt-2">
+      <button type="button" class="btn btn-pri" onclick="saveLead()">Guardar</button>
+      <button type="button" class="btn btn-ghost" onclick="closeModalDirect()">Cancelar</button>
+    </div>`);
+}
+
+function saveLead(id){
+  const nom=byId('f-lead-nom').value.trim();
+  if(!nom) return alert('Ingresá el nombre');
+  const d={nom,tel:byId('f-lead-tel').value,mail:byId('f-lead-mail').value,propId:byId('f-lead-prop').value,presupuesto:byId('f-lead-presup').value,fuente:byId('f-lead-fuente').value,notas:byId('f-lead-notas').value,etapa:id?((DB.leads||[]).find(l=>l.id===id)||{}).etapa||'nuevo':'nuevo',updated:today()};
+  if(!DB.leads) DB.leads=[];
+  if(id){ Object.assign(DB.leads.find(l=>l.id===id)||{},d); }
+  else { DB.leads.push({...d,id:'ld'+uid(),created:today()}); }
+  saveDB(DB); closeModalDirect(); renderOportunidades();
+}
+
+function verLead(id){
+  const l=(DB.leads||[]).find(x=>x.id===id); if(!l) return;
+  const p=l.propId?getProp(l.propId):{};
+  const inqOpts=`<option value="">Sin asignar</option>`+DB.inqs.map(i=>`<option value="${i.id}">${i.nom}</option>`).join('');
+  const timeline=(l.actividad||[]).map(a=>`<div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">${a.tipo}: ${a.desc}</div><div class="tl-date">${fmtDate(a.fecha)}</div>${a.nota?`<div class="tl-note">${a.nota}</div>`:''}</div></div>`).join('');
+  openModal(`Lead: ${l.nom}`,`
+    <div class="info-grid" style="margin-bottom:14px">
+      <div class="info-item"><div class="lbl">Teléfono</div><div class="val">${l.tel||'-'}</div></div>
+      <div class="info-item"><div class="lbl">Email</div><div class="val">${l.mail||'-'}</div></div>
+      <div class="info-item"><div class="lbl">Propiedad</div><div class="val">${p.dir||'Sin asignar'}</div></div>
+      <div class="info-item"><div class="lbl">Fuente</div><div class="val">${l.fuente||'-'}</div></div>
+      <div class="info-item"><div class="lbl">Presupuesto</div><div class="val">${l.presupuesto?fmt(+l.presupuesto):'-'}</div></div>
+      <div class="info-item"><div class="lbl">Etapa</div><div class="val">${ETAPAS.find(e=>e.id===l.etapa)?.label||'-'}</div></div>
+    </div>
+    ${l.notas?`<div style="padding:10px;background:var(--bg-subtle);border-radius:6px;font-size:12px;color:var(--muted);margin-bottom:14px;border-left:3px solid var(--gold-600)">${l.notas}</div>`:''}
+    <div class="section-heading-accent">Timeline de actividad</div>
+    <div class="timeline" style="margin-bottom:12px">${timeline||'<p class="text-muted text-sm" style="padding:8px 0">Sin actividad registrada</p>'}</div>
+    <div class="flex gap-2 flex-wrap">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="addActividad('${id}')">+ Agregar interacción</button>
+      <button type="button" class="btn btn-grn btn-sm" onclick="convertirInquilino('${id}')">→ Convertir en inquilino</button>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="closeModalDirect();editLeadModal('${id}')">Editar lead</button>
+      <button type="button" class="btn btn-red btn-sm" onclick="delLead('${id}')">Eliminar</button>
+    </div>`);
+}
+
+function addActividad(leadId){
+  const tipos=['llamada','email','visita','propuesta','otro'];
+  closeModalDirect();
+  setTimeout(()=>openModal('Agregar interacción',`
+    <div class="form-grid">
+      <div class="form-group"><label>Tipo</label><select id="f-act-tipo">${tipos.map(t=>`<option>${t}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Fecha</label><input id="f-act-fecha" type="date" value="${today()}"></div>
+      <div class="form-group full"><label>Descripción</label><input id="f-act-desc" placeholder="¿Qué pasó?"></div>
+      <div class="form-group full"><label>Nota</label><input id="f-act-nota" placeholder="Detalle adicional (opcional)"></div>
+    </div>
+    <div class="flex gap-2 mt-2">
+      <button type="button" class="btn btn-pri" onclick="saveActividad('${leadId}')">Guardar</button>
+      <button type="button" class="btn btn-ghost" onclick="closeModalDirect()">Cancelar</button>
+    </div>`),50);
+}
+
+function saveActividad(leadId){
+  const lead=(DB.leads||[]).find(l=>l.id===leadId); if(!lead) return;
+  if(!lead.actividad) lead.actividad=[];
+  lead.actividad.push({tipo:byId('f-act-tipo').value,desc:byId('f-act-desc').value,nota:byId('f-act-nota').value,fecha:byId('f-act-fecha').value});
+  lead.updated=today();
+  saveDB(DB); closeModalDirect(); setTimeout(()=>verLead(leadId),50);
+}
+
+function convertirInquilino(leadId){
+  const l=(DB.leads||[]).find(x=>x.id===leadId); if(!l) return;
+  if(!confirm(`¿Convertir a ${l.nom} en inquilino?`)) return;
+  DB.inqs.push({id:'i'+uid(),nom:l.nom,dni:'',tel:l.tel||'',mail:l.mail||'',garantia:'propietario garante'});
+  l.etapa='ganado'; l.updated=today();
+  saveDB(DB); closeModalDirect(); nav('inquilinos');
+}
+
+function editLeadModal(id){
+  const l=(DB.leads||[]).find(x=>x.id===id); if(!l) return;
+  const propOpts=`<option value="">Sin asignar</option>`+DB.props.map(p=>`<option value="${p.id}"${l.propId===p.id?' selected':''}>${p.dir}</option>`).join('');
+  openModal('Editar Lead',`
+    <div class="form-grid">
+      <div class="form-group full"><label>Nombre</label><input id="f-lead-nom" value="${l.nom||''}"></div>
+      <div class="form-group"><label>Teléfono</label><input id="f-lead-tel" value="${l.tel||''}"></div>
+      <div class="form-group"><label>Email</label><input id="f-lead-mail" value="${l.mail||''}"></div>
+      <div class="form-group"><label>Propiedad</label><select id="f-lead-prop">${propOpts}</select></div>
+      <div class="form-group"><label>Presupuesto</label><input id="f-lead-presup" type="number" value="${l.presupuesto||''}"></div>
+      <div class="form-group"><label>Fuente</label><select id="f-lead-fuente">${FUENTES.map(f=>`<option${l.fuente===f?' selected':''}>${f}</option>`).join('')}</select></div>
+      <div class="form-group full"><label>Notas</label><textarea id="f-lead-notas" rows="2">${l.notas||''}</textarea></div>
+    </div>
+    <div class="flex gap-2 mt-2">
+      <button type="button" class="btn btn-pri" onclick="saveLead('${id}')">Guardar</button>
+      <button type="button" class="btn btn-ghost" onclick="closeModalDirect()">Cancelar</button>
+    </div>`);
+}
+
+function delLead(id){
+  if(!confirm('¿Eliminar lead?')) return;
+  DB.leads=(DB.leads||[]).filter(l=>l.id!==id);
+  saveDB(DB); closeModalDirect(); renderOportunidades();
+}
+
+// ── PORTAL DE INQUILINO (solo lectura) ────────────────────────────────
+function renderPortalInquilino(inqId){
+  const i=getInq(inqId); if(!i.id) return;
+  const ct=inqContract(inqId);
+  const prop=ct?getProp(ct.propId):{};
+  const cobros=DB.cobros.filter(cb=>cb.inqId===inqId).sort((a,b)=>b.periodo.localeCompare(a.periodo)).slice(0,12);
+  const proxVenc=ct?contractEnd(ct):null;
+  const dias=proxVenc?diffDays(today(),proxVenc):null;
+
+  const cobroRows=cobros.map(cb=>`<tr>
+    <td>${cb.periodo}</td>
+    <td class="num">${fmt(cb.monto)}</td>
+    <td>${cobroBadge(cb.estado)}</td>
+    <td>${cb.fecha?fmtDate(cb.fecha):'-'}</td>
+  </tr>`).join('');
+
+  const el=byId('modal-body');
+  byId('modal-title').textContent='Portal del inquilino';
+  el.innerHTML=`<div class="portal-view">
+    <div class="portal-header">
+      <div class="portal-logo">Aura Prop</div>
+      <div class="portal-tenant">Hola, ${i.nom}</div>
+    </div>
+    <div class="portal-body">
+      ${ct?`<div class="portal-prop-card">
+        <div class="lbl">Tu propiedad</div>
+        <div style="font-size:15px;font-weight:600;margin-top:4px">${prop.dir||'-'}</div>
+        <div class="text-muted text-sm" style="margin-top:2px">${prop.tipo||''} · Contrato hasta ${fmtDate(proxVenc)}</div>
+      </div>`:''}
+      ${dias!==null&&dias>=0&&dias<=30?`<div class="portal-next-due">
+        <div><div style="font-size:12px;font-weight:600;color:var(--warning)">⚠ Contrato vence pronto</div><div class="text-muted text-sm">en ${dias} días — ${fmtDate(proxVenc)}</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--warning)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>`:''}
+      <div class="section-heading-accent">Historial de pagos</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Período</th><th>Monto</th><th>Estado</th><th>Fecha</th></tr></thead>
+        <tbody>${cobroRows||'<tr><td colspan="4" class="text-muted" style="text-align:center;padding:16px">Sin pagos registrados</td></tr>'}</tbody>
+      </table></div>
+      <div style="margin-top:16px;text-align:center">
+        <a href="https://wa.me/541132609254?text=${encodeURIComponent('Hola Aura Prop, soy '+i.nom)}" target="_blank" class="btn btn-grn">WhatsApp al administrador</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function abrirPortalInquilino(inqId){
+  byId('overlay').classList.add('open');
+  renderPortalInquilino(inqId);
+}
+
+function copiarLinkPortal(inqId){
+  const url=`${location.origin}${location.pathname}?portal=${inqId}`;
+  navigator.clipboard.writeText(url).then(()=>alert('Link copiado: '+url)).catch(()=>prompt('Copiá este link:',url));
+}
+
+// Render portal si viene por URL param
+(function checkPortalParam(){
+  const params=new URLSearchParams(location.search);
+  const portalId=params.get('portal');
+  if(portalId) setTimeout(()=>abrirPortalInquilino(portalId),200);
+})();
+
+// ── GASTOS POR PROPIEDAD ──────────────────────────────────────────────
+const GASTOS_CATS=['ABL','Expensas','Reparación','Arreglo','Otro'];
+
+function renderGastosList(propId){
+  const p=getProp(propId);
+  const gastos=p.gastos||[];
+  if(!gastos.length) return `<div class="empty-state" style="padding:24px">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;color:var(--brd);margin-bottom:8px"><path d="M9 14h6M9 10h6M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>
+    <p class="text-muted text-sm">Sin gastos registrados</p>
+  </div>`;
+  const total=gastos.reduce((s,g)=>s+g.monto,0);
+  const rows=gastos.slice().reverse().map(g=>`<tr>
+    <td>${fmtDate(g.fecha)}</td>
+    <td><span class="badge b-muted">${g.cat}</span></td>
+    <td class="num">${fmt(g.monto)}</td>
+    <td class="text-muted text-sm">${g.prov||'-'}</td>
+    <td>${g.desc||'-'}</td>
+    <td class="row-actions"><button type="button" class="btn btn-red btn-sm" onclick="delGasto('${propId}','${g.id}')">✕</button></td>
+  </tr>`).join('');
+  return `<div class="tbl-wrap"><table>
+    <thead><tr><th>Fecha</th><th>Categoría</th><th>Monto</th><th>Proveedor</th><th>Descripción</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr><td colspan="2" style="padding:8px 12px;font-weight:600;font-size:12px;color:var(--muted)">Total</td><td class="num" style="padding:8px 12px;font-weight:600;color:var(--danger)">${fmt(total)}</td><td colspan="3"></td></tr></tfoot>
+  </table></div>`;
+}
+
+function openGastoModal(propId){
+  openModal('Registrar Gasto',`
+    <div class="form-grid">
+      <div class="form-group"><label>Fecha</label><input id="f-gasto-fecha" type="date" value="${today()}"></div>
+      <div class="form-group"><label>Categoría</label><select id="f-gasto-cat">${GASTOS_CATS.map(c=>`<option>${c}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Monto (ARS)</label><input id="f-gasto-monto" type="number" placeholder="0"></div>
+      <div class="form-group"><label>Proveedor</label><input id="f-gasto-prov" placeholder="Ej: Plomero García"></div>
+      <div class="form-group full"><label>Descripción</label><input id="f-gasto-desc" placeholder="Ej: Reparación cañería cocina"></div>
+    </div>
+    <div class="flex gap-2 mt-2">
+      <button type="button" class="btn btn-pri" onclick="saveGasto('${propId}')">Guardar</button>
+      <button type="button" class="btn btn-ghost" onclick="closeModalDirect()">Cancelar</button>
+    </div>`);
+}
+
+function saveGasto(propId){
+  const monto=+byId('f-gasto-monto').value;
+  if(!monto) return alert('Ingresá el monto');
+  const p=getProp(propId);
+  if(!p.gastos) p.gastos=[];
+  p.gastos.push({id:'g'+uid(),fecha:byId('f-gasto-fecha').value,cat:byId('f-gasto-cat').value,monto,prov:byId('f-gasto-prov').value,desc:byId('f-gasto-desc').value});
+  saveDB(DB); closeModalDirect(); renderPropiedades(propId);
+}
+
+function delGasto(propId,gastoId){
+  if(!confirm('¿Eliminar gasto?')) return;
+  const p=getProp(propId);
+  p.gastos=(p.gastos||[]).filter(g=>g.id!==gastoId);
+  saveDB(DB); renderPropiedades(propId);
+}
+
 // ── BÚSQUEDA GLOBAL (Ctrl+K) ──────────────────────────────────────────
 let searchIdx=-1;
 function openSearch(){
@@ -2238,7 +2597,8 @@ const renders = {
   contratos: renderContratos,
   inquilinos: renderInquilinos,
   propietarios: renderPropietarios,
-  reportes: renderReportes
+  reportes: renderReportes,
+  oportunidades: renderOportunidades
 };
 
 // ── INIT ──────────────────────────────────────────────────────────────
