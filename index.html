@@ -4,129 +4,127 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Aura Prop — Sistema de Gestión Inmobiliaria | Yusta Labs</title>
 <meta name="description" content="Aura Prop: sistema de gestión integral para inmobiliarias y administradores de propiedades. Administrá propiedades, contratos, inquilinos, cobros y liquidaciones. Demo por Yusta Labs.">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#F8F7F4;
+  --bg:#F7F5F2;
+  --surface:#FFFFFF;
   --surf:#FFFFFF;
+  --surface-2:#F0EDE8;
   --card:#FFFFFF;
-  --sidebar:#1A2744;
-  --sidebar-text:#E8E4DC;
-  --sidebar-muted:rgba(232,228,220,0.5);
-  --sidebar-active:rgba(201,169,110,0.15);
-  --primary:#1A2744;
-  --accent:#8B6914;
-  --text:#1A1A2E;
-  --muted:#6B7280;
-  --brd:#E5E7EB;
-  --tbl-header:#F9FAFB;
+  --border:#E5DDD6;
+  --border-strong:#C9BDB4;
+  --primary:#2D5F7A;
+  --primary-dark:#1F4458;
+  --primary-light:#EAF1F5;
+  --accent:#C8A165;
+  --text:#1A1512;
+  --text-secondary:#6B5E52;
+  --text-muted:#9E8E82;
+  --text-dim:#C9BDB4;
+  --muted:#9E8E82;
+  --brd:#E5DDD6;
+  --tbl-header:#F0EDE8;
+  --bg-subtle:#F0EDE8;
   --danger:#C0392B;
-  --danger-light:#FADBD8;
-  --success:#1E7E4B;
-  --success-light:#D4F1DB;
-  --warning:#D97706;
-  --warning-light:#FEF3C7;
-  --rad:4px;
-  /* Design tokens v2 */
-  --navy-900:#0F1A2E;
-  --navy-800:#1A2744;
-  --navy-700:#243247;
-  --gold-500:#B88C2E;
-  --gold-600:#8B6914;
-  --gold-100:#F5E9C8;
-  --bg-subtle:#F9FAFB;
-  --shadow-sm:0 1px 2px rgba(15,26,46,0.04);
-  --shadow-md:0 4px 8px rgba(15,26,46,0.06);
-  --shadow-lg:0 12px 24px rgba(15,26,46,0.08);
-  --shadow-gold:0 4px 12px rgba(184,140,46,0.2);
-  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-6:24px;--space-8:32px;
-  --font-mono:'JetBrains Mono',monospace;
+  --danger-light:#FDECEB;
+  --success:#2D7A44;
+  --success-light:#EBF5EE;
+  --warning:#B8751A;
+  --warning-light:#FEF3E2;
+  --rad:8px;
+  --gold-500:#C8A165;
+  --gold-600:#A07840;
+  --gold-100:#F5EBD8;
+  --navy-800:#2D5F7A;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.07);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.09);
+  --shadow-lg:0 8px 24px rgba(0,0,0,0.12);
+  --font-mono:'Inter',sans-serif;
+  --sidebar-w:220px;
 }
-body{font-family:'Source Sans 3',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;font-size:14px;font-weight:400}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;font-size:14px;font-weight:400}
 a{color:inherit;text-decoration:none}
-button{cursor:pointer;font:inherit}
-input,select,textarea{font-family:'Source Sans 3',system-ui,sans-serif;background:var(--surf);border:1px solid var(--brd);color:var(--text);border-radius:var(--rad);padding:8px 10px;width:100%;outline:none;font-size:13px;font-weight:400}
+button{cursor:pointer;font:inherit;font-family:'Inter',sans-serif}
+input,select,textarea{font-family:'Inter',sans-serif;background:var(--surf);border:1px solid var(--brd);color:var(--text);border-radius:var(--rad);padding:8px 10px;width:100%;outline:none;font-size:13px;font-weight:400}
 input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 select option{background:var(--surf)}
 label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
-h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:500}
-h3{font-family:'Playfair Display',serif;font-size:16px;font-weight:500}
+h2{font-family:'Inter',sans-serif;font-size:20px;font-weight:700}
+h3{font-family:'Inter',sans-serif;font-size:16px;font-weight:600}
 
 /* Sidebar */
 #sidebar{
-  width:220px;
-  background:var(--sidebar);
+  width:var(--sidebar-w);
+  background:var(--surface);
+  border-right:1px solid var(--border);
   display:flex;
   flex-direction:column;
   padding:0;
   position:fixed;
   top:0;left:0;height:100vh;
   z-index:100;
-  transition:.25s;
-  overflow:hidden;
+  overflow-y:auto;
+  box-shadow:0 1px 3px rgba(0,0,0,0.07);
 }
 .logo{
   display:flex;
-  flex-direction:column;
-  padding:28px 20px 24px;
-  border-bottom:1px solid rgba(232,228,220,0.1);
+  align-items:center;
+  gap:10px;
+  padding:18px 16px;
+  border-bottom:1px solid var(--border);
 }
+.logo-svg{width:34px;height:34px;flex-shrink:0}
 .logo-title{
-  font-family:'Playfair Display',serif;
-  font-size:22px;
-  font-weight:400;
-  color:#FFFFFF;
-  letter-spacing:0.04em;
+  font-family:'Inter',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  color:var(--text);
 }
 .logo-subtitle{
-  font-family:'Source Sans 3',sans-serif;
-  font-size:11px;
-  color:var(--sidebar-muted);
-  margin-top:4px;
-  letter-spacing:0.06em;
-  text-transform:uppercase;
+  font-family:'Inter',sans-serif;
+  font-size:10px;
+  color:var(--text-muted);
+  font-weight:400;
 }
+.nav-section{padding:10px 0}
+.nav-label{font-size:10px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;padding:6px 16px 4px}
 nav a{
   display:flex;
   align-items:center;
   gap:10px;
-  padding:11px 20px;
-  color:var(--sidebar-muted);
+  padding:10px 16px;
+  color:var(--text-muted);
   border-left:3px solid transparent;
   transition:.15s;
-  font-size:12px;
+  font-size:13px;
   font-weight:400;
-  letter-spacing:0.04em;
-  text-transform:uppercase;
+  min-height:38px;
 }
-nav a:hover{color:var(--sidebar-text);background:rgba(255,255,255,0.04)}
-nav a.active{color:var(--sidebar-text);border-left-color:var(--accent);background:var(--sidebar-active)}
-nav a svg{width:16px;height:16px;flex-shrink:0;opacity:0.7}
-nav a.active svg{opacity:1}
+nav a:hover{background:var(--surface-2);color:var(--text)}
+nav a.active{background:var(--primary-light);color:var(--primary);border-left-color:var(--primary);font-weight:600}
+nav a svg{width:18px;height:18px;flex-shrink:0}
 .sidebar-footer{
-  padding:16px 20px;
-  border-top:1px solid rgba(232,228,220,0.1);
+  padding:12px 16px;
+  border-top:1px solid var(--border);
   margin-top:auto;
+  font-size:11px;
+  color:var(--text-dim);
 }
 .sidebar-footer a{
   font-size:11px;
-  color:var(--sidebar-muted);
+  color:var(--text-muted);
   text-decoration:none;
   transition:color .15s;
-  letter-spacing:0.04em;
 }
-.sidebar-footer a:hover{color:var(--accent)}
-.sidebar-footer .powered{
-  color:var(--accent);
-  font-size:11px;
-  letter-spacing:0.04em;
-}
+.sidebar-footer a:hover{color:var(--text)}
+.sidebar-footer .powered{color:var(--text-muted)}
 
 /* Main */
-#main{margin-left:220px;flex:1;padding:32px;min-height:100vh;background:var(--bg)}
+#main{margin-left:var(--sidebar-w);flex:1;padding:24px;min-height:100vh;background:var(--bg)}
 .page{display:none}.page.active{display:block}
 
 /* Cards & KPIs */
@@ -140,7 +138,7 @@ nav a.active svg{opacity:1}
   box-shadow:0 1px 3px rgba(0,0,0,0.08);
 }
 .kpi-val{
-  font-family:'Playfair Display',serif;
+  font-family:'Inter',sans-serif;
   font-size:clamp(1.8rem,3vw,2.6rem);
   font-weight:400;
   margin:8px 0 4px;
@@ -162,7 +160,7 @@ nav a.active svg{opacity:1}
 .section-heading-accent{
   border-left:3px solid var(--accent);
   padding-left:10px;
-  font-family:'Playfair Display',serif;
+  font-family:'Inter',sans-serif;
   font-size:14px;
   font-weight:500;
   color:var(--text);
@@ -205,7 +203,7 @@ tr:hover .row-actions{opacity:1}
 .b-teal{background:rgba(13,148,136,0.1);color:#0D7A70}
 
 /* Buttons */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rad);border:none;font-size:12px;font-weight:600;transition:.15s;letter-spacing:0.04em;text-transform:uppercase;font-family:'Source Sans 3',sans-serif}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rad);border:none;font-size:12px;font-weight:600;transition:.15s;letter-spacing:0.04em;text-transform:uppercase;font-family:'Inter',sans-serif}
 .btn-pri{background:var(--primary);color:#fff;border:1px solid var(--primary)}.btn-pri:hover{background:#243460}
 .btn-teal{background:var(--accent);color:#fff;border:1px solid var(--accent)}.btn-teal:hover{background:#7a5c12}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--brd)}.btn-ghost:hover{color:var(--text);border-color:#C8C3BB;background:#F5F2EB}
@@ -324,7 +322,7 @@ tr:hover .row-actions{opacity:1}
 .kpi-v2-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .kpi-v2-icon{width:18px;height:18px;color:var(--muted);flex-shrink:0}
 .kpi-v2-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
-.kpi-v2-value{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:400;line-height:1;margin-bottom:6px;color:var(--text)}
+.kpi-v2-value{font-family:'Inter',sans-serif;font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:400;line-height:1;margin-bottom:6px;color:var(--text)}
 .kpi-v2-trend{font-size:11px;margin-bottom:8px;font-weight:600;letter-spacing:0.02em}
 .kpi-v2-trend.up{color:var(--success)}
 .kpi-v2-trend.down{color:var(--danger)}
@@ -353,14 +351,14 @@ tr:hover .row-actions{opacity:1}
 /* ── Empty states ─────────────────────────────────────────────────── */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;text-align:center;color:var(--muted)}
 .empty-state svg{width:64px;height:64px;color:var(--brd);margin-bottom:16px;opacity:0.7}
-.empty-state h4{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:var(--text);margin-bottom:6px}
+.empty-state h4{font-family:'Inter',sans-serif;font-size:16px;font-weight:500;color:var(--text);margin-bottom:6px}
 .empty-state p{font-size:13px;margin-bottom:16px;max-width:260px;line-height:1.5}
 
 /* ── Search modal (Ctrl+K) ────────────────────────────────────────── */
 #search-overlay{display:none;position:fixed;inset:0;background:rgba(15,26,46,0.5);z-index:500;align-items:flex-start;justify-content:center;padding-top:80px;backdrop-filter:blur(3px)}
 #search-overlay.open{display:flex}
 #search-box{background:var(--surf);border:1px solid var(--brd);border-radius:12px;width:100%;max-width:560px;box-shadow:var(--shadow-lg);overflow:hidden}
-#search-input{width:100%;border:none;outline:none;padding:14px 18px;font-size:16px;font-family:'Source Sans 3',sans-serif;background:transparent;color:var(--text);border-bottom:1px solid var(--brd)}
+#search-input{width:100%;border:none;outline:none;padding:14px 18px;font-size:16px;font-family:'Inter',sans-serif;background:transparent;color:var(--text);border-bottom:1px solid var(--brd)}
 #search-input::placeholder{color:var(--muted)}
 #search-results{max-height:360px;overflow-y:auto;padding:8px 0}
 .search-result{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;transition:background .1s}
@@ -414,7 +412,7 @@ tr:hover .row-actions{opacity:1}
 
 /* ── Multi-moneda ─────────────────────────────────────────────────── */
 .currency-toggle{display:flex;border:1px solid var(--brd);border-radius:4px;overflow:hidden}
-.currency-toggle button{padding:5px 10px;font-size:11px;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);font-family:'Source Sans 3',sans-serif}
+.currency-toggle button{padding:5px 10px;font-size:11px;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);font-family:'Inter',sans-serif}
 .currency-toggle button.active{background:var(--primary);color:#fff}
 
 /* ── Kanban pipeline ──────────────────────────────────────────────── */
@@ -454,9 +452,9 @@ tr:hover .row-actions{opacity:1}
 .tl-note{font-size:12px;color:var(--muted);margin-top:3px;font-style:italic}
 
 /* ── Portal inquilino ─────────────────────────────────────────────── */
-.portal-view{max-width:600px;margin:0 auto;font-family:'Source Sans 3',sans-serif}
+.portal-view{max-width:600px;margin:0 auto;font-family:'Inter',sans-serif}
 .portal-header{background:var(--navy-800);color:#fff;padding:24px;border-radius:12px 12px 0 0;text-align:center}
-.portal-logo{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:4px}
+.portal-logo{font-family:'Inter',sans-serif;font-size:22px;margin-bottom:4px}
 .portal-tenant{font-size:14px;opacity:0.8}
 .portal-body{background:var(--surf);border:1px solid var(--brd);border-radius:0 0 12px 12px;padding:24px}
 .portal-prop-card{border:1px solid var(--brd);border-radius:8px;padding:16px;margin-bottom:16px;background:var(--bg-subtle)}
@@ -464,6 +462,19 @@ tr:hover .row-actions{opacity:1}
 
 /* ── Gastos ───────────────────────────────────────────────────────── */
 .gastos-chart-wrap{height:180px;position:relative}
+
+/* ── Agent Cards ──────────────────────────────────────────────────── */
+.agent-card{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:18px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:10px}
+.agent-header{display:flex;align-items:flex-start;gap:10px}
+.agent-icon{width:36px;height:36px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0}
+.agent-name{font-size:14px;font-weight:700;color:var(--text)}
+.agent-tag{font-size:11px;color:var(--success);font-weight:600}
+.agent-desc{font-size:13px;color:var(--muted);line-height:1.55;margin:0}
+.agent-solves{list-style:none;display:flex;flex-direction:column;gap:5px;flex:1}
+.agent-solves li{font-size:12px;color:var(--muted);padding-left:14px;position:relative;line-height:1.45}
+.agent-solves li::before{content:'→';position:absolute;left:0;color:var(--primary);font-weight:700}
+.agents-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+@media(max-width:768px){.agents-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -471,13 +482,16 @@ tr:hover .row-actions{opacity:1}
 <!-- SIDEBAR -->
 <div id="sidebar">
   <div class="logo">
-    <div class="logo-title">Aura Prop</div>
-    <div class="logo-subtitle">by Yusta Labs</div>
+    <svg class="logo-svg" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="34" height="34" rx="8" fill="url(#lg-prop)"/>
+      <defs><linearGradient id="lg-prop" x1="0" y1="0" x2="34" y2="34" gradientUnits="userSpaceOnUse"><stop stop-color="#2D5F7A"/><stop offset="1" stop-color="#C8A165"/></linearGradient></defs>
+      <path d="M17 8l-8 6v10h5v-6h6v6h5V14z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div><div class="logo-title">Aura Prop</div><div class="logo-subtitle"><a href="https://yustalabs-web.vercel.app" target="_blank" style="color:inherit;text-decoration:none">By Yusta Labs</a></div></div>
   </div>
   <nav id="desk-nav"></nav>
   <div class="sidebar-footer">
-    <div style="margin-bottom:6px;font-size:10px;color:var(--sidebar-muted);letter-spacing:0.04em;text-transform:uppercase;">Desarrollado por</div>
-    <a href="https://yustalabs-web.vercel.app" target="_blank" class="powered">Yusta Labs ↗</a>
+    <a href="https://yustalabs-web.vercel.app" target="_blank" class="powered">Powered by Yusta Labs ↗</a>
   </div>
 </div>
 
@@ -494,6 +508,7 @@ tr:hover .row-actions{opacity:1}
   <div id="page-reportes" class="page"></div>
   <div id="page-agenda" class="page"></div>
   <div id="page-oportunidades" class="page"></div>
+  <div id="page-agentes" class="page"></div>
 </div>
 <!-- Bell alerts dropdown container -->
 <div id="bell-container" style="position:fixed;top:16px;right:16px;z-index:150;display:none">
@@ -599,7 +614,8 @@ const PAGES = [
   {id:'inquilinos', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',label:'Inquilinos'},
   {id:'propietarios',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>',label:'Propietarios'},
   {id:'reportes',   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',label:'Reportes'},
-  {id:'oportunidades',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',label:'Pipeline'}
+  {id:'oportunidades',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',label:'Pipeline'},
+  {id:'agentes',      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/><circle cx="9" cy="14" r="1" fill="currentColor"/><circle cx="15" cy="14" r="1" fill="currentColor"/></svg>',label:'Agentes IA'}
 ];
 let curPage='dashboard';
 
@@ -721,7 +737,7 @@ function renderDashboard(){
     <h2>Dashboard</h2>
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <span class="text-muted text-sm" style="font-size:13px;letter-spacing:0.04em;">Marzo 2024</span>
-      <button type="button" onclick="openSearch()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--brd);border-radius:6px;background:var(--surf);color:var(--muted);font-size:12px;cursor:pointer;font-family:'Source Sans 3',sans-serif">
+      <button type="button" onclick="openSearch()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--brd);border-radius:6px;background:var(--surf);color:var(--muted);font-size:12px;cursor:pointer;font-family:'Inter',sans-serif">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         Buscar <kbd style="background:var(--tbl-header);border:1px solid var(--brd);border-radius:3px;padding:1px 5px;font-size:10px;font-family:var(--font-mono)">Ctrl+K</kbd>
       </button>
@@ -729,8 +745,8 @@ function renderDashboard(){
   </div>
   <div id="alertas-panel" style="margin-bottom:16px"></div>
   <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
-    <button type="button" onclick="nav('contratos')" style="flex:1;min-width:160px;padding:13px 18px;font-size:12px;font-weight:600;background:var(--primary);color:#fff;border:none;border-radius:var(--rad);cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;font-family:'Source Sans 3',sans-serif">Nuevo Contrato / Propiedad</button>
-    <button type="button" onclick="nav('reportes')" style="flex:1;min-width:160px;padding:13px 18px;font-size:12px;font-weight:600;background:var(--success);color:#fff;border:none;border-radius:var(--rad);cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;font-family:'Source Sans 3',sans-serif">Ver Cobros del Mes</button>
+    <button type="button" onclick="nav('contratos')" style="flex:1;min-width:160px;padding:13px 18px;font-size:12px;font-weight:600;background:var(--primary);color:#fff;border:none;border-radius:var(--rad);cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;font-family:'Inter',sans-serif">Nuevo Contrato / Propiedad</button>
+    <button type="button" onclick="nav('reportes')" style="flex:1;min-width:160px;padding:13px 18px;font-size:12px;font-weight:600;background:var(--success);color:#fff;border:none;border-radius:var(--rad);cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;font-family:'Inter',sans-serif">Ver Cobros del Mes</button>
   </div>
 
   <!-- KPI Cards v2 -->
@@ -1142,7 +1158,7 @@ function modalUpdate(id){
     <div class="form-group mt-1"><label>Porcentaje de aumento (%)</label><input id="f-pct-upd" type="number" placeholder="Ej: 25"></div>
     <div id="upd-preview" style="margin:14px 0;padding:14px;background:var(--tbl-header);border-left:3px solid var(--success);display:none">
       <div class="text-muted text-sm" style="margin-bottom:4px;">Nuevo monto</div>
-      <div id="upd-nuevo" style="font-family:'Playfair Display',serif;font-size:22px;font-weight:400;color:var(--success)"></div>
+      <div id="upd-nuevo" style="font-family:'Inter',sans-serif;font-size:22px;font-weight:400;color:var(--success)"></div>
     </div>
     <div class="flex gap-2 mt-1">
       <button class="btn btn-ghost" onclick="previewUpd('${id}')">Calcular</button>
@@ -1367,10 +1383,10 @@ function printRecibo(id){
   const inq=getInq(cb.inqId); const ct=getContract(cb.contId);
   const prop=ct?getProp(ct.propId):{};
   const z=byId('print-zone');
-  z.innerHTML=`<div style="padding:40px;font-family:'Source Sans 3',sans-serif;color:#000;background:#fff">
+  z.innerHTML=`<div style="padding:40px;font-family:'Inter',sans-serif;color:#000;background:#fff">
     <div style="display:flex;justify-content:space-between;margin-bottom:24px">
-      <div><h1 style="font-family:'Playfair Display',serif;font-size:24px;margin:0;font-weight:400">Aura Prop</h1><p style="color:#666;margin:0;font-size:12px;letter-spacing:0.04em;text-transform:uppercase">Administración de Alquileres</p></div>
-      <div style="text-align:right"><h2 style="margin:0;font-family:'Playfair Display',serif;font-weight:400">RECIBO DE PAGO</h2><p style="color:#666">${fmtDate(cb.fecha||today())}</p></div>
+      <div><h1 style="font-family:'Inter',sans-serif;font-size:24px;margin:0;font-weight:400">Aura Prop</h1><p style="color:#666;margin:0;font-size:12px;letter-spacing:0.04em;text-transform:uppercase">Administración de Alquileres</p></div>
+      <div style="text-align:right"><h2 style="margin:0;font-family:'Inter',sans-serif;font-weight:400">RECIBO DE PAGO</h2><p style="color:#666">${fmtDate(cb.fecha||today())}</p></div>
     </div>
     <hr style="margin:0 0 20px;border-color:#E2DDD6">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
@@ -1522,7 +1538,7 @@ function modalLiquidacion(ownId){
       <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span style="color:var(--muted);font-size:13px">Cobrado bruto</span><strong>${fmt(bruto)}</strong></div>
       <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span style="color:var(--muted);font-size:13px">Comisión (${o.com}%)</span><span style="color:var(--danger)">− ${fmt(com)}</span></div>
       <div class="flex justify-between" style="padding:6px 0;border-bottom:1px solid var(--brd)"><span style="color:var(--muted);font-size:13px">Expensas</span><span style="color:var(--danger)">− ${fmt(expTotal)}</span></div>
-      <div class="flex justify-between" style="padding:10px 0"><strong style="font-family:'Playfair Display',serif">Neto a transferir</strong><strong style="font-family:'Playfair Display',serif;font-size:18px;color:var(--success)">${fmt(neto)}</strong></div>
+      <div class="flex justify-between" style="padding:10px 0"><strong style="font-family:'Inter',sans-serif">Neto a transferir</strong><strong style="font-family:'Inter',sans-serif;font-size:18px;color:var(--success)">${fmt(neto)}</strong></div>
     </div>
     <div style="font-size:12px;color:var(--muted);margin:10px 0">CBU: ${o.cbu}</div>
     <div class="flex gap-2 mt-1">
@@ -1542,10 +1558,10 @@ function printLiq(id){
 function printLiqInline(ownId,periodo,bruto,com,exp,neto){
   const o=getOwner(ownId);
   const z=byId('print-zone');
-  z.innerHTML=`<div style="padding:40px;font-family:'Source Sans 3',sans-serif;color:#000">
+  z.innerHTML=`<div style="padding:40px;font-family:'Inter',sans-serif;color:#000">
     <div style="display:flex;justify-content:space-between;margin-bottom:24px">
-      <div><h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:400">Aura Prop</h1><p style="color:#666;font-size:12px;text-transform:uppercase;letter-spacing:0.04em">Liquidación mensual</p></div>
-      <div style="text-align:right"><h2 style="font-family:'Playfair Display',serif;font-weight:400">LIQUIDACIÓN</h2><p>${periodo} · ${fmtDate(today())}</p></div>
+      <div><h1 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:400">Aura Prop</h1><p style="color:#666;font-size:12px;text-transform:uppercase;letter-spacing:0.04em">Liquidación mensual</p></div>
+      <div style="text-align:right"><h2 style="font-family:'Inter',sans-serif;font-weight:400">LIQUIDACIÓN</h2><p>${periodo} · ${fmtDate(today())}</p></div>
     </div><hr style="margin:0 0 20px;border-color:#E2DDD6">
     <div><strong>Propietario:</strong> ${o.nom}<br><strong>CBU:</strong> ${o.cbu}</div>
     <table style="width:100%;border-collapse:collapse;margin:20px 0">
@@ -1806,14 +1822,14 @@ function imprimirContrato(id){
   const c=getContract(id); if(!c) return;
   const p=getProp(c.propId); const inq=getInq(c.inqId); const ow=getOwner(p.propId);
   const z=byId('print-zone');
-  z.innerHTML=`<div style="padding:48px 56px;font-family:'Source Sans 3',sans-serif;color:#000;background:#fff;max-width:800px;margin:0 auto;">
+  z.innerHTML=`<div style="padding:48px 56px;font-family:'Inter',sans-serif;color:#000;background:#fff;max-width:800px;margin:0 auto;">
     <div style="text-align:center;margin-bottom:36px;border-bottom:2px solid #1A2744;padding-bottom:20px;">
       <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#8B6914;margin-bottom:6px;">Administración de Propiedades</div>
-      <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#1A2744;margin:0 0 4px;">CONTRATO DE LOCACIÓN</h1>
+      <h1 style="font-family:'Inter',sans-serif;font-size:28px;font-weight:600;color:#1A2744;margin:0 0 4px;">CONTRATO DE LOCACIÓN</h1>
       <div style="font-size:12px;color:#64748B;">Generado el ${fmtDate(today())}</div>
     </div>
     <div style="margin-bottom:24px;">
-      <h3 style="font-family:'Playfair Display',serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">INMUEBLE</h3>
+      <h3 style="font-family:'Inter',sans-serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">INMUEBLE</h3>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
         <div><strong>Dirección:</strong><br>${p.dir}</div>
         <div><strong>Tipo:</strong> ${p.tipo} · ${p.m2} m²</div>
@@ -1821,7 +1837,7 @@ function imprimirContrato(id){
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
       <div>
-        <h3 style="font-family:'Playfair Display',serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">PROPIETARIO / LOCADOR</h3>
+        <h3 style="font-family:'Inter',sans-serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">PROPIETARIO / LOCADOR</h3>
         <div style="font-size:13px;line-height:1.8;">
           <div><strong>Nombre:</strong> ${ow.nom||'-'}</div>
           <div><strong>Teléfono:</strong> ${ow.tel||'-'}</div>
@@ -1830,7 +1846,7 @@ function imprimirContrato(id){
         </div>
       </div>
       <div>
-        <h3 style="font-family:'Playfair Display',serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">INQUILINO / LOCATARIO</h3>
+        <h3 style="font-family:'Inter',sans-serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">INQUILINO / LOCATARIO</h3>
         <div style="font-size:13px;line-height:1.8;">
           <div><strong>Nombre:</strong> ${inq.nom||'-'}</div>
           <div><strong>DNI:</strong> ${inq.dni||'-'}</div>
@@ -1840,7 +1856,7 @@ function imprimirContrato(id){
       </div>
     </div>
     <div style="margin-bottom:24px;">
-      <h3 style="font-family:'Playfair Display',serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">CONDICIONES DE LA LOCACIÓN</h3>
+      <h3 style="font-family:'Inter',sans-serif;font-size:14px;color:#1A2744;border-bottom:1px solid #E2DDD6;padding-bottom:6px;margin-bottom:12px;">CONDICIONES DE LA LOCACIÓN</h3>
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         <tr style="background:#F0EDE6;"><th style="text-align:left;padding:8px 12px;border:1px solid #E2DDD6;">Concepto</th><th style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">Detalle</th></tr>
         <tr><td style="padding:8px 12px;border:1px solid #E2DDD6;">Monto mensual inicial</td><td style="text-align:right;padding:8px 12px;border:1px solid #E2DDD6;">${fmt(c.monto)}</td></tr>
@@ -1962,7 +1978,7 @@ function modalLiquidacionProp(propId){
         <span style="color:var(--muted);font-size:13px">Mantenimiento (${mant.length} registro${mant.length!==1?'s':''})</span>
         <span style="color:var(--danger)">− ${fmt(mantCosto)}</span>
       </div>
-      <div class="flex justify-between" style="padding:10px 0"><strong style="font-family:'Playfair Display',serif">Neto a transferir</strong><strong style="font-family:'Playfair Display',serif;font-size:18px;color:var(--success)">${fmt(neto)}</strong></div>
+      <div class="flex justify-between" style="padding:10px 0"><strong style="font-family:'Inter',sans-serif">Neto a transferir</strong><strong style="font-family:'Inter',sans-serif;font-size:18px;color:var(--success)">${fmt(neto)}</strong></div>
     </div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:10px">CBU: ${ow.cbu||'-'}</div>
     <div class="flex gap-2 mt-1">
@@ -1975,10 +1991,10 @@ function printLiqProp(propId,cobrado,com,mant,neto){
   const p=getProp(propId); const ow=getOwner(p.propId);
   const comPct=ow.com||10;
   const z=byId('print-zone');
-  z.innerHTML=`<div style="padding:40px;font-family:'Source Sans 3',sans-serif;color:#000">
+  z.innerHTML=`<div style="padding:40px;font-family:'Inter',sans-serif;color:#000">
     <div style="display:flex;justify-content:space-between;margin-bottom:24px">
-      <div><h1 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:400">Aura Prop</h1><p style="color:#666;font-size:12px;text-transform:uppercase;letter-spacing:0.04em">Liquidación de propietario</p></div>
-      <div style="text-align:right"><h2 style="font-family:'Playfair Display',serif;font-weight:400">LIQUIDACIÓN</h2><p>${today().slice(0,7)} · ${fmtDate(today())}</p></div>
+      <div><h1 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:400">Aura Prop</h1><p style="color:#666;font-size:12px;text-transform:uppercase;letter-spacing:0.04em">Liquidación de propietario</p></div>
+      <div style="text-align:right"><h2 style="font-family:'Inter',sans-serif;font-weight:400">LIQUIDACIÓN</h2><p>${today().slice(0,7)} · ${fmtDate(today())}</p></div>
     </div><hr style="margin:0 0 20px;border-color:#E2DDD6">
     <div><strong>Propietario:</strong> ${ow.nom}<br><strong>Propiedad:</strong> ${p.dir}<br><strong>CBU:</strong> ${ow.cbu||'-'}</div>
     <table style="width:100%;border-collapse:collapse;margin:20px 0">
@@ -2590,6 +2606,83 @@ document.addEventListener('keydown',e=>{
 });
 
 // ── RENDER MAP ─────────────────────────────────────────────────────────
+function renderAgentes(){
+  const el = byId('page-agentes');
+  if(!el) return;
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div>
+        <h2 style="margin-bottom:4px">Agentes IA</h2>
+        <p style="font-size:13px;color:var(--muted)">Automatizaciones activas dentro de Aura Prop — cada agente resuelve un problema específico de tu inmobiliaria.</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;background:var(--success-light);border:1px solid #b6dfc4;border-radius:8px;padding:8px 14px">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0"></div>
+        <span style="font-size:12px;font-weight:600;color:var(--success)">6 agentes activos · 89 tareas automatizadas esta semana</span>
+      </div>
+    </div>
+    <div style="background:var(--warning-light);border:1px solid #f5d98a;border-radius:8px;padding:10px 14px;font-size:13px;display:flex;align-items:flex-start;gap:8px;margin-bottom:16px;color:var(--warning)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/><circle cx="9" cy="14" r="1" fill="currentColor"/><circle cx="15" cy="14" r="1" fill="currentColor"/></svg>
+      <div><strong>El Administrador sugiere:</strong> Contrato de Av. Callao 850 vence en 12 días. Se recomienda iniciar gestión de renovación hoy.<div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="nav('contratos')">Ver contrato</button></div></div>
+    </div>
+    <div class="agents-grid">
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div><div class="agent-name">El Corredor Virtual</div><div class="agent-tag">Activo · 28 consultas respondidas</div></div>
+        </div>
+        <p class="agent-desc">Responde consultas de propiedades disponibles 24/7, envía información y agenda visitas automáticamente.</p>
+        <ul class="agent-solves"><li>Atiende interesados fuera del horario de atención</li><li>Envía ficha de propiedad y precio al instante</li><li>Agenda visitas directamente en el calendario</li></ul>
+        <button class="btn btn-ghost btn-sm" onclick="nav('propiedades')">Ver en acción</button>
+      </div>
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+          <div><div class="agent-name">El Administrador</div><div class="agent-tag">Activo · 14 cobros gestionados</div></div>
+        </div>
+        <p class="agent-desc">Gestiona alquileres vencidos y expensas impagas con seguimiento sistemático y sin fricción.</p>
+        <ul class="agent-solves"><li>Contacta inquilinos con mora y registra promesas de pago</li><li>Reduce mora del 18% al 4% en 3 meses</li><li>Genera estado de cuenta automático por inquilino</li></ul>
+        <button class="btn btn-ghost btn-sm" onclick="nav('contratos')">Ver en acción</button>
+      </div>
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div><div class="agent-name">El Gestor</div><div class="agent-tag">Activo · Cartera actualizada</div></div>
+        </div>
+        <p class="agent-desc">Mantiene el estado de cada propiedad al día: publicada, en consulta, reservada, escriturada.</p>
+        <ul class="agent-solves"><li>Controla vencimiento de documentos y seguros</li><li>Actualiza estados automáticamente por pipeline</li><li>Alerta sobre escrituras y renovaciones pendientes</li></ul>
+        <button class="btn btn-ghost btn-sm" onclick="nav('propiedades')">Ver en acción</button>
+      </div>
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+          <div><div class="agent-name">El Analista</div><div class="agent-tag">Activo · Reporte semanal listo</div></div>
+        </div>
+        <p class="agent-desc">Entrega datos de rendimiento: propiedades más consultadas, tiempo en cartera, precio de cierre vs. publicado.</p>
+        <ul class="agent-solves"><li>Identifica qué propiedades tienen mejor rendimiento</li><li>Compara precio publicado vs. cierre real</li><li>Envía reporte semanal automático por WhatsApp</li></ul>
+        <button class="btn btn-ghost btn-sm" onclick="nav('reportes')">Ver en acción</button>
+      </div>
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></div>
+          <div><div class="agent-name">El Community</div><div class="agent-tag">Activo · 4 posts generados hoy</div></div>
+        </div>
+        <p class="agent-desc">Genera posts de propiedades para Instagram, newsletters y análisis de mercado.</p>
+        <ul class="agent-solves"><li>Publica propiedades nuevas con fotos y descripción</li><li>Genera newsletters para la base de clientes</li><li>Construye autoridad y atrae compradores orgánicamente</li></ul>
+        <button class="btn btn-ghost btn-sm" onclick="nav('propiedades')">Ver en acción</button>
+      </div>
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <div><div class="agent-name">El Captador</div><div class="agent-tag">Activo · 5 clientes re-contactados</div></div>
+        </div>
+        <p class="agent-desc">Detecta interesados inactivos y los re-contacta con propiedades similares a las que consultaron.</p>
+        <ul class="agent-solves"><li>Re-activa leads que no llamaron en más de 30 días</li><li>Usa datos reales de la ficha, no mensajes genéricos</li><li>Avisa sobre contratos próximos a vencer</li></ul>
+        <button class="btn btn-ghost btn-sm" onclick="nav('oportunidades')">Ver en acción</button>
+      </div>
+    </div>
+  `;
+}
+
 const renders = {
   dashboard: renderDashboard,
   propiedades: renderPropiedades,
@@ -2598,7 +2691,8 @@ const renders = {
   inquilinos: renderInquilinos,
   propietarios: renderPropietarios,
   reportes: renderReportes,
-  oportunidades: renderOportunidades
+  oportunidades: renderOportunidades,
+  agentes: renderAgentes
 };
 
 // ── INIT ──────────────────────────────────────────────────────────────
