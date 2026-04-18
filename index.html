@@ -473,6 +473,18 @@ tr:hover .row-actions{opacity:1}
 .agent-solves{list-style:none;display:flex;flex-direction:column;gap:5px;flex:1}
 .agent-solves li{font-size:12px;color:var(--muted);padding-left:14px;position:relative;line-height:1.45}
 .agent-solves li::before{content:'→';position:absolute;left:0;color:var(--primary);font-weight:700}
+.agent-intro{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:16px 20px;margin-bottom:20px}
+.agent-intro-title{font-size:15px;font-weight:700;color:var(--primary);margin-bottom:4px}
+.agent-intro-sub{font-size:13px;color:var(--text-secondary);line-height:1.5}
+.agent-status{margin-left:auto;background:var(--success-bg);color:var(--success);font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.agent-scenario{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.agent-flow{display:flex;flex-direction:column;gap:6px;margin:8px 0;padding:10px 12px;background:var(--surface-2);border-radius:8px}
+.flow-step{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-secondary)}
+.flow-dot{width:18px;height:18px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;margin-top:1px}
+.flow-dot.detect{background:#EAF1F5;color:#2D5F7A}
+.flow-dot.analyze{background:var(--warning-bg);color:var(--warning)}
+.flow-dot.act{background:var(--success-bg);color:var(--success)}
+@media(max-width:480px){.agents-grid{grid-template-columns:1fr}.agent-header{flex-wrap:wrap;gap:8px}.agent-status{margin-left:0}.agent-card{padding:14px}.agent-flow{padding:8px 10px}.flow-step{font-size:11px}}
 .agents-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
 @media(max-width:768px){.agents-grid{grid-template-columns:1fr}}
 </style>
@@ -810,6 +822,21 @@ function renderDashboard(){
       <div class="section-heading-accent">Cobros del mes</div>
       ${cList?`<div class="tbl-wrap"><table><thead><tr><th>Inquilino</th><th>Propiedad</th><th>Monto</th><th>Estado</th><th>Fecha</th></tr></thead><tbody>${cList}</tbody></table></div>`
       :`<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><h4>Sin cobros este mes</h4><p>Registrá los cobros del mes desde Inquilinos & Cobros</p></div>`}
+    </div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--primary);border-radius:12px;padding:20px;margin-top:16px;box-shadow:var(--shadow-sm)">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div style="width:28px;height:28px;background:var(--primary-light);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--primary)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg></div>
+      <span style="font-size:14px;font-weight:700;color:var(--text)">Actividad de Agentes IA</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--text-secondary)">El Cobrador — recordatorio enviado a 3 inquilinos con cuota vencida</span><span style="background:var(--success-bg);color:var(--success);font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px">Completado</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--text-secondary)">El Renovador — contrato de Av. Corrientes vence en 18 días</span><span style="background:var(--warning-bg);color:var(--warning);font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px">Acción requerida</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--text-secondary)">El Analista — resumen mensual de cartera generado</span><span style="background:var(--success-bg);color:var(--success);font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px">Completado</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--text-secondary)">La Recepcionista — 2 consultas de propiedades respondidas fuera de horario</span><span style="background:var(--info-bg);color:var(--info);font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px">En proceso</span></div>
+    </div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+      <button type="button" onclick="nav('agentes')" style="background:transparent;border:1px solid var(--brd);color:var(--muted);padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg> Ver todos los agentes</button>
     </div>
   </div>`;
 
@@ -2607,80 +2634,38 @@ document.addEventListener('keydown',e=>{
 
 // ── RENDER MAP ─────────────────────────────────────────────────────────
 function renderAgentes(){
-  const el = byId('page-agentes');
-  if(!el) return;
-  el.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-      <div>
-        <h2 style="margin-bottom:4px">Agentes IA</h2>
-        <p style="font-size:13px;color:var(--muted)">Automatizaciones activas dentro de Aura Prop — cada agente resuelve un problema específico de tu inmobiliaria.</p>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;background:var(--success-light);border:1px solid #b6dfc4;border-radius:8px;padding:8px 14px">
-        <div style="width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0"></div>
-        <span style="font-size:12px;font-weight:600;color:var(--success)">6 agentes activos · 89 tareas automatizadas esta semana</span>
-      </div>
-    </div>
-    <div style="background:var(--warning-light);border:1px solid #f5d98a;border-radius:8px;padding:10px 14px;font-size:13px;display:flex;align-items:flex-start;gap:8px;margin-bottom:16px;color:var(--warning)">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/><circle cx="9" cy="14" r="1" fill="currentColor"/><circle cx="15" cy="14" r="1" fill="currentColor"/></svg>
-      <div><strong>El Administrador sugiere:</strong> Contrato de Av. Callao 850 vence en 12 días. Se recomienda iniciar gestión de renovación hoy.<div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="nav('contratos')">Ver contrato</button></div></div>
-    </div>
-    <div class="agents-grid">
-      <div class="agent-card">
-        <div class="agent-header">
-          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-          <div><div class="agent-name">El Corredor Virtual</div><div class="agent-tag">Activo · 28 consultas respondidas</div></div>
-        </div>
-        <p class="agent-desc">Responde consultas de propiedades disponibles 24/7, envía información y agenda visitas automáticamente.</p>
-        <ul class="agent-solves"><li>Atiende interesados fuera del horario de atención</li><li>Envía ficha de propiedad y precio al instante</li><li>Agenda visitas directamente en el calendario</li></ul>
-        <button class="btn btn-ghost btn-sm" onclick="nav('propiedades')">Ver en acción</button>
-      </div>
-      <div class="agent-card">
-        <div class="agent-header">
-          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-          <div><div class="agent-name">El Administrador</div><div class="agent-tag">Activo · 14 cobros gestionados</div></div>
-        </div>
-        <p class="agent-desc">Gestiona alquileres vencidos y expensas impagas con seguimiento sistemático y sin fricción.</p>
-        <ul class="agent-solves"><li>Contacta inquilinos con mora y registra promesas de pago</li><li>Reduce mora del 18% al 4% en 3 meses</li><li>Genera estado de cuenta automático por inquilino</li></ul>
-        <button class="btn btn-ghost btn-sm" onclick="nav('contratos')">Ver en acción</button>
-      </div>
-      <div class="agent-card">
-        <div class="agent-header">
-          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-          <div><div class="agent-name">El Gestor</div><div class="agent-tag">Activo · Cartera actualizada</div></div>
-        </div>
-        <p class="agent-desc">Mantiene el estado de cada propiedad al día: publicada, en consulta, reservada, escriturada.</p>
-        <ul class="agent-solves"><li>Controla vencimiento de documentos y seguros</li><li>Actualiza estados automáticamente por pipeline</li><li>Alerta sobre escrituras y renovaciones pendientes</li></ul>
-        <button class="btn btn-ghost btn-sm" onclick="nav('propiedades')">Ver en acción</button>
-      </div>
-      <div class="agent-card">
-        <div class="agent-header">
-          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-          <div><div class="agent-name">El Analista</div><div class="agent-tag">Activo · Reporte semanal listo</div></div>
-        </div>
-        <p class="agent-desc">Entrega datos de rendimiento: propiedades más consultadas, tiempo en cartera, precio de cierre vs. publicado.</p>
-        <ul class="agent-solves"><li>Identifica qué propiedades tienen mejor rendimiento</li><li>Compara precio publicado vs. cierre real</li><li>Envía reporte semanal automático por WhatsApp</li></ul>
-        <button class="btn btn-ghost btn-sm" onclick="nav('reportes')">Ver en acción</button>
-      </div>
-      <div class="agent-card">
-        <div class="agent-header">
-          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></div>
-          <div><div class="agent-name">El Community</div><div class="agent-tag">Activo · 4 posts generados hoy</div></div>
-        </div>
-        <p class="agent-desc">Genera posts de propiedades para Instagram, newsletters y análisis de mercado.</p>
-        <ul class="agent-solves"><li>Publica propiedades nuevas con fotos y descripción</li><li>Genera newsletters para la base de clientes</li><li>Construye autoridad y atrae compradores orgánicamente</li></ul>
-        <button class="btn btn-ghost btn-sm" onclick="nav('propiedades')">Ver en acción</button>
-      </div>
-      <div class="agent-card">
-        <div class="agent-header">
-          <div class="agent-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-          <div><div class="agent-name">El Captador</div><div class="agent-tag">Activo · 5 clientes re-contactados</div></div>
-        </div>
-        <p class="agent-desc">Detecta interesados inactivos y los re-contacta con propiedades similares a las que consultaron.</p>
-        <ul class="agent-solves"><li>Re-activa leads que no llamaron en más de 30 días</li><li>Usa datos reales de la ficha, no mensajes genéricos</li><li>Avisa sobre contratos próximos a vencer</li></ul>
-        <button class="btn btn-ghost btn-sm" onclick="nav('oportunidades')">Ver en acción</button>
-      </div>
-    </div>
-  `;
+  const el=byId('page-agentes');
+  if(!el)return;
+  const agents=[
+    {icon:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',tag:'Agente de atención',name:'El Corredor Virtual',desc:'Son las 11pm. Un interesado escribe: "Vi el departamento de Palermo de 2 ambientes, ¿cuánto es el alquiler?" El agente consulta la ficha, verifica disponibilidad y responde con precio, expensas y link para agendar visita — sin que ningún corredor esté en línea.',flow:[{t:'detect',l:'Detecta',v:'Consulta entrante sobre propiedad disponible, precio, condiciones o solicitud de visita'},{t:'analyze',l:'Analiza',v:'Busca la propiedad en el sistema, verifica disponibilidad, precio actual y condiciones vigentes'},{t:'act',l:'Actúa',v:'Responde con ficha completa y agenda la visita directamente en el calendario del corredor'}],solves:['Interesados que escriben a la noche y al día siguiente ya alquilaron con la competencia','Tiempo de corredores perdido respondiendo las mismas consultas de precio y disponibilidad','Leads que se enfrían porque nadie respondió en las primeras 2 horas']},
+    {icon:'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',tag:'Agente de cobros',name:'El Administrador',desc:'El inquilino de Bulnes 1240 tiene el alquiler de marzo vencido hace 8 días. El agente envía el estado de cuenta con el detalle exacto, registra si paga o promete, y escala si hay silencio. Sin que el administrador haga una sola llamada.',flow:[{t:'detect',l:'Detecta',v:'Cuota de alquiler o expensa vencida sin pago acreditado después del período de gracia'},{t:'analyze',l:'Analiza',v:'Calcula mora, días vencidos, índice de actualización aplicable e historial de pagos del inquilino'},{t:'act',l:'Actúa',v:'Envía estado de cuenta formal con opciones de pago y registra respuesta; escala si no hay reacción en 72hs'}],solves:['Mora que se acumula porque el seguimiento se hace tarde o de forma irregular','Administradores que deben hacer de cobradores en vez de conseguir propiedades','Estado de cuenta por inquilino que nunca se actualiza ni se envía proactivamente']},
+    {icon:'<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',tag:'Agente de contratos',name:'El Renovador',desc:'El contrato de Av. Corrientes 1580 vence en 47 días. El índice ICL subió 18% en el último trimestre. El agente calcula el nuevo valor, prepara la propuesta de renovación y avisa al propietario y al inquilino con tiempo suficiente para negociar.',flow:[{t:'detect',l:'Detecta',v:'Contrato activo con vencimiento en los próximos 90 días o documento legal próximo a expirar'},{t:'analyze',l:'Analiza',v:'Aplica índice de actualización vigente (ICL/CER), calcula nuevo valor y prepara propuesta'},{t:'act',l:'Actúa',v:'Notifica al propietario y al inquilino con propuesta de renovación y plazos de respuesta'}],solves:['Contratos que vencen y nadie inició la renovación hasta último momento','Actualizaciones de alquiler que se aplican tarde o con índice incorrecto','Propietarios que se enteran del vencimiento cuando ya es un problema legal']},
+    {icon:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',tag:'Agente de datos',name:'El Analista',desc:'Cada lunes: "Cartera: 23 propiedades. Ocupación: 87%. Cobrado este mes: $4.8M. Tiempo promedio de alquiler: 18 días. Propiedad con mayor demanda: Palermo 2 amb. 3 contratos vencen en 60 días." Llega solo.',flow:[{t:'detect',l:'Detecta',v:'Cierre de mes o semana, o período configurado con datos de cartera actualizados'},{t:'analyze',l:'Analiza',v:'Procesa ocupación, cobros, tiempo de cartera, demanda por zona y contratos por estado'},{t:'act',l:'Actúa',v:'Envía reporte ejecutivo al dueño de la inmobiliaria con KPIs y alertas de acción prioritaria'}],solves:['Dueños de inmobiliaria que no saben el estado real de su cartera sin consultar uno por uno','Decisiones de precio de publicación sin datos de demanda real por zona','Oportunidades de captación perdidas por no medir qué tipo de propiedad rota más rápido']},
+    {icon:'<path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>',tag:'Agente de publicación',name:'El Community',desc:'Ingresó una casa nueva en Belgrano: 4 ambientes, jardín, cochera. El agente genera la descripción para Zonaprop, la ficha para Instagram y el mensaje para la base de clientes que buscó ese perfil — todo listo para aprobar en 2 clics.',flow:[{t:'detect',l:'Detecta',v:'Nueva propiedad cargada en el sistema o propiedad que cambió de estado a disponible'},{t:'analyze',l:'Analiza',v:'Lee características, precio, zona y genera copy adaptado a cada canal de publicación'},{t:'act',l:'Actúa',v:'Prepara publicación para portales, post para Instagram y mensaje para la base de interesados filtrada'}],solves:['Propiedades que tardan días en publicarse porque nadie tiene tiempo de escribir la descripción','Publicaciones inconsistentes en portales, redes y WhatsApp','Base de interesados que no se notifica cuando entra una propiedad que les encajaría']},
+    {icon:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',tag:'Agente de retención',name:'El Captador',desc:'González consultó por 3 propiedades hace 35 días y después desapareció. El agente detecta el silencio, revisa su búsqueda original y lo contacta con una propiedad nueva que entró esta semana y se ajusta a lo que buscaba.',flow:[{t:'detect',l:'Detecta',v:'Lead interesado sin actividad hace más de 20 días o interesado cuya búsqueda coincide con propiedad nueva'},{t:'analyze',l:'Analiza',v:'Revisa perfil de búsqueda, propiedades consultadas y filtra el catálogo actual por match'},{t:'act',l:'Actúa',v:'Envía propuesta personalizada con las propiedades que mejor encajan, no un catálogo genérico'}],solves:['Leads que se enfrían porque el corredor no tuvo tiempo de hacer seguimiento manual','Propiedades nuevas que no se muestran a los interesados correctos','Pipeline de ventas que se vacía porque nadie reactiva a los interesados previos']}
+  ];
+  const tpl=agents.map(a=>`<div class="agent-card">
+  <div class="agent-header">
+    <div class="agent-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">${a.icon}</svg></div>
+    <div style="flex:1"><div class="agent-tag">${a.tag}</div><div class="agent-name">${a.name}</div></div>
+    <span class="agent-status">Activo</span>
+  </div>
+  <p class="agent-desc">${a.desc}</p>
+  <div class="agent-scenario">Cómo funciona dentro de Aura Prop</div>
+  <div class="agent-flow">${a.flow.map(f=>`<div class="flow-step"><div class="flow-dot ${f.t}">${f.l.slice(0,3).toUpperCase()}</div><div><strong>${f.l}</strong> — ${f.v}</div></div>`).join('')}</div>
+  <div class="agent-scenario" style="margin-top:6px">Problemas que elimina</div>
+  <ul class="agent-solves">${a.solves.map(s=>`<li>${s}</li>`).join('')}</ul>
+</div>`).join('');
+  el.innerHTML=`<div class="pg-hd"><h2>Agentes IA</h2></div>
+<div class="agent-intro">
+  <div class="agent-intro-title">Tus empleados que trabajan 24/7 sin sueldo fijo</div>
+  <div class="agent-intro-sub">Cada agente monitorea la cartera, detecta situaciones clave y actúa solo — atención a interesados, cobros, renovaciones, análisis de cartera, publicación y captación, automatizados para tu inmobiliaria.</div>
+</div>
+<div style="background:var(--warning-bg);border:1px solid #f5d98a;border-radius:8px;padding:10px 14px;font-size:13px;display:flex;align-items:flex-start;gap:8px;margin-bottom:16px;color:var(--warning)">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+  <div><strong>El Renovador sugiere:</strong> Contrato de Av. Callao 850 vence en 12 días. Iniciar gestión de renovación esta semana. <div style="margin-top:6px"><button class="btn btn-ghost btn-sm" onclick="nav('contratos')">Ver contrato</button></div></div>
+</div>
+<div class="agents-grid">${tpl}</div>`;
 }
 
 const renders = {
